@@ -108,7 +108,7 @@ def simulation():
         # Store results in session
         session['simulation_results'] = simulation_results
         
-        return redirect(url_for('simulation_results'))
+        return redirect(url_for('simulation'))
 
     case_study_results = session.get('case_study_results')
     case_study_dashboard = (

@@ -257,7 +257,7 @@
                         <a class="nav-link {% if request.endpoint == 'result' %}active{% endif %}" href="{{ url_for('result') }}">Results</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link {% if request.endpoint in ['simulation', 'simulation_results', 'case_study_simulation'] %}active{% endif %}" href="{{ url_for('simulation') }}">Simulation</a>
+                        <a class="nav-link {% if request.endpoint in ['simulation', 'case_study_simulation'] %}active{% endif %}" href="{{ url_for('simulation') }}">Simulation</a>
                     </li>
                 </ul>
             </div>
