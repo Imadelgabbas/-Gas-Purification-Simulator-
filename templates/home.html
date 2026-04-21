@@ -1,0 +1,99 @@
+{% extends "base.html" %}
+
+{% block title %}Home | Gas Purification Simulator{% endblock %}
+
+{% block content %}
+<section class="page-hero text-center mb-5">
+    <div class="section-label justify-content-center">
+        <i class="fa-solid fa-gauge-high"></i>
+        Professional Process Platform
+    </div>
+    <h1 class="display-4 fw-bold mb-3">Gas Purification Simulator</h1>
+    <p class="lead text-secondary mx-auto mb-4" style="max-width: 760px;">
+        Analyze, simulate and optimize gas purification processes
+    </p>
+    <div class="d-flex justify-content-center gap-3 flex-wrap">
+        <a href="{{ url_for('simulation') }}" class="btn btn-primary btn-lg">
+            <i class="fa-solid fa-play me-2"></i>Start Simulation
+        </a>
+        <a href="{{ url_for('input_page') }}" class="btn btn-outline-primary btn-lg">
+            <i class="fa-solid fa-sliders me-2"></i>Enter Input Data
+        </a>
+    </div>
+</section>
+
+<section class="mb-5">
+    <div class="text-center mb-4">
+        <div class="section-label justify-content-center">
+            <i class="fa-solid fa-layer-group"></i>
+            Core Features
+        </div>
+        <h2 class="fw-bold">Everything in one clean workflow</h2>
+        <p class="text-secondary mb-0">Move from operating data to recommendations, simulations and case-study insight.</p>
+    </div>
+
+    <div class="row g-4 justify-content-center">
+        <div class="col-lg-4 col-md-6">
+            <div class="app-card h-100 text-center">
+                <div class="icon-tile mx-auto mb-3">
+                    <i class="fa-solid fa-scale-balanced"></i>
+                </div>
+                <h3 class="h4 fw-bold mb-3">Compare Methods</h3>
+                <p class="text-secondary mb-4">
+                    Evaluate Absorption, Adsorption and Membrane options side by side with clear scores and recommendations.
+                </p>
+                <a href="{{ url_for('input_page') }}" class="btn btn-outline-primary">
+                    <i class="fa-solid fa-arrow-right me-2"></i>Open Comparison
+                </a>
+            </div>
+        </div>
+        <div class="col-lg-4 col-md-6">
+            <div class="app-card h-100 text-center">
+                <div class="icon-tile mx-auto mb-3">
+                    <i class="fa-solid fa-chart-line"></i>
+                </div>
+                <h3 class="h4 fw-bold mb-3">Simulate Processes</h3>
+                <p class="text-secondary mb-4">
+                    Visualize purity and efficiency trends with Plotly charts and monitor performance over time.
+                </p>
+                <a href="{{ url_for('simulation') }}" class="btn btn-outline-primary">
+                    <i class="fa-solid fa-wave-square me-2"></i>Run Simulation
+                </a>
+            </div>
+        </div>
+        <div class="col-lg-4 col-md-6">
+            <div class="app-card h-100 text-center">
+                <div class="icon-tile mx-auto mb-3">
+                    <i class="fa-solid fa-industry"></i>
+                </div>
+                <h3 class="h4 fw-bold mb-3">Case Study</h3>
+                <p class="text-secondary mb-4">
+                    Explore H2/CO purification with a ready-made TSA case study designed for fast industrial review.
+                </p>
+                <a href="{{ url_for('case_study_simulation') }}" class="btn btn-outline-primary">
+                    <i class="fa-solid fa-flask me-2"></i>View Case Study
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="app-card text-center">
+    <div class="section-label justify-content-center">
+        <i class="fa-solid fa-circle-info"></i>
+        Ready To Begin
+    </div>
+    <h2 class="fw-bold mb-3">Build your next purification scenario</h2>
+    <p class="text-secondary mx-auto mb-4" style="max-width: 700px;">
+        Start from the simulation workspace for quick performance previews or open the input form for a full recommendation workflow.
+    </p>
+    <div class="d-flex justify-content-center gap-3 flex-wrap">
+        <a href="{{ url_for('simulation') }}" class="btn btn-primary">
+            <i class="fa-solid fa-rocket me-2"></i>Start Simulation
+        </a>
+        <a href="{{ url_for('input_page') }}" class="btn btn-outline-primary">
+            <i class="fa-solid fa-pen-to-square me-2"></i>Enter Parameters
+        </a>
+    </div>
+</section>
+{% endblock %}

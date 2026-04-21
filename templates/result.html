@@ -1,0 +1,622 @@
+{% extends "base.html" %}
+
+{% block title %}Results | Gas Purification Simulator{% endblock %}
+
+{% block extra_css %}
+<style>
+    .result-hero-card {
+        position: relative;
+        overflow: hidden;
+        background:
+            radial-gradient(circle at top right, rgba(13, 110, 253, 0.16), transparent 28%),
+            linear-gradient(135deg, #ffffff 0%, #f6faff 100%);
+    }
+
+    .result-hero-score {
+        min-height: 220px;
+        border-radius: 1.5rem;
+        background: linear-gradient(160deg, #0d6efd 0%, #0b5ed7 100%);
+        color: #ffffff;
+        box-shadow: 0 18px 34px rgba(13, 110, 253, 0.24);
+    }
+
+    .result-hero-score .score-label {
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        font-size: 0.78rem;
+        opacity: 0.82;
+    }
+
+    .result-hero-score .score-value {
+        font-size: clamp(3rem, 7vw, 4.6rem);
+        font-weight: 800;
+        line-height: 1;
+    }
+
+    .result-suitability-badge {
+        font-size: 0.9rem;
+        font-weight: 700;
+        padding: 0.65rem 1rem;
+        border-radius: 999px;
+    }
+
+    .result-kpi-card {
+        background: #ffffff;
+        border: 1px solid #e3edf8;
+        border-radius: 1.25rem;
+        box-shadow: 0 10px 24px rgba(15, 23, 42, 0.05);
+        padding: 1.25rem;
+        height: 100%;
+    }
+
+    .result-kpi-card .kpi-label {
+        font-size: 0.76rem;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: #6b7a90;
+        margin-bottom: 0.45rem;
+    }
+
+    .result-kpi-card .kpi-value {
+        font-size: 1.6rem;
+        font-weight: 800;
+        color: #0f172a;
+        line-height: 1.1;
+    }
+
+    .input-summary-card {
+        background: #ffffff;
+        border: 1px solid #e3edf8;
+        border-radius: 1.15rem;
+        padding: 1rem;
+        height: 100%;
+    }
+
+    .input-summary-card .summary-label {
+        font-size: 0.75rem;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: #6b7a90;
+        margin-bottom: 0.35rem;
+    }
+
+    .input-summary-card .summary-value {
+        font-weight: 700;
+        color: #163047;
+        font-size: 1rem;
+    }
+
+    .gas-chip {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.45rem;
+        padding: 0.55rem 0.85rem;
+        border-radius: 999px;
+        background: rgba(13, 110, 253, 0.08);
+        color: #0d6efd;
+        font-weight: 600;
+        font-size: 0.9rem;
+    }
+
+    .method-card {
+        border: 1px solid #e3edf8;
+        border-radius: 1.35rem;
+        background: #ffffff;
+        box-shadow: 0 14px 28px rgba(15, 23, 42, 0.05);
+        height: 100%;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .method-card.best-method {
+        border-color: rgba(13, 110, 253, 0.45);
+        box-shadow: 0 18px 36px rgba(13, 110, 253, 0.16);
+        transform: translateY(-2px);
+    }
+
+    .method-card.best-method::before {
+        content: "";
+        position: absolute;
+        inset: 0 auto 0 0;
+        width: 6px;
+        background: linear-gradient(180deg, #0d6efd 0%, #6ea8fe 100%);
+    }
+
+    .method-card .method-score {
+        font-size: 2rem;
+        font-weight: 800;
+        color: #0f172a;
+        line-height: 1;
+    }
+
+    .method-card .method-subtitle {
+        color: #6b7a90;
+        font-size: 0.95rem;
+    }
+
+    .method-pill {
+        border-radius: 999px;
+        padding: 0.45rem 0.8rem;
+        font-size: 0.8rem;
+        font-weight: 700;
+    }
+
+    .best-method-ribbon {
+        border-radius: 999px;
+        padding: 0.45rem 0.8rem;
+        background: rgba(13, 110, 253, 0.12);
+        color: #0d6efd;
+        font-size: 0.8rem;
+        font-weight: 700;
+    }
+
+    .method-list {
+        padding-left: 0;
+        list-style: none;
+        margin-bottom: 0;
+    }
+
+    .method-list li {
+        display: flex;
+        gap: 0.65rem;
+        align-items: flex-start;
+        color: #334155;
+        margin-bottom: 0.7rem;
+        font-size: 0.94rem;
+    }
+
+    .method-list li:last-child {
+        margin-bottom: 0;
+    }
+
+    .chart-panel {
+        background: #ffffff;
+        border: 1px solid #e3edf8;
+        border-radius: 1.35rem;
+        box-shadow: 0 14px 28px rgba(15, 23, 42, 0.05);
+        overflow: hidden;
+    }
+
+    .chart-panel .chart-header {
+        padding: 1.35rem 1.5rem 0.25rem;
+    }
+
+    .chart-panel .chart-frame {
+        min-height: 390px;
+        padding: 0 0.75rem 0.5rem;
+    }
+
+    @media (max-width: 991.98px) {
+        .result-hero-score {
+            min-height: 180px;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+{% if form_data and form_data != 'null' and comparison_results and comparison_results != 'null' %}
+<section class="mb-4">
+    <div class="app-card result-hero-card p-4 p-xl-5">
+        <div class="row g-4 align-items-center">
+            <div class="col-xl-8">
+                <div class="section-label">
+                    <i class="fa-solid fa-award"></i>
+                    Engineering Recommendation
+                </div>
+                <p class="text-secondary text-uppercase small fw-semibold mb-2">Recommended Method</p>
+                <h1 id="bestMethodName" class="display-4 fw-bold mb-3">-</h1>
+                <p id="bestMethodExplanation" class="lead text-secondary mb-4" style="max-width: 760px;">-</p>
+                <div class="d-flex flex-wrap gap-2 mb-4">
+                    <span id="bestMethodSuitability" class="badge result-suitability-badge text-bg-secondary">-</span>
+                    <span class="badge rounded-pill text-bg-light border px-3 py-2">
+                        <i class="fa-solid fa-compass-drafting me-2 text-primary"></i>Process Guidance
+                    </span>
+                </div>
+                <div class="d-flex gap-3 flex-wrap">
+                    <a href="{{ url_for('download_report') }}" class="btn btn-primary">
+                        <i class="fa-solid fa-file-pdf me-2"></i>Download PDF
+                    </a>
+                    <a href="{{ url_for('input_page') }}" class="btn btn-outline-primary">
+                        <i class="fa-solid fa-arrow-rotate-right me-2"></i>New Analysis
+                    </a>
+                    <a href="{{ url_for('simulation') }}" class="btn btn-outline-secondary">
+                        <i class="fa-solid fa-wave-square me-2"></i>Open Simulation
+                    </a>
+                </div>
+            </div>
+            <div class="col-xl-4">
+                <div class="result-hero-score d-flex flex-column align-items-center justify-content-center text-center p-4">
+                    <p class="score-label mb-2">Overall Score</p>
+                    <div id="bestMethodScore" class="score-value mb-2">-</div>
+                    <p class="mb-3 opacity-75">Best overall fit for the specified operating window</p>
+                    <div class="badge rounded-pill text-bg-light text-primary px-3 py-2">
+                        <i class="fa-solid fa-ranking-star me-2"></i>Method Ranking
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="mb-4">
+    <div class="row g-4" id="kpiCardsRow">
+        <div class="col-sm-6 col-xl-3">
+            <div class="result-kpi-card">
+                <p class="kpi-label">Estimated Purity</p>
+                <div id="estimatedPurityKpi" class="kpi-value">-</div>
+                <p class="text-secondary small mb-0 mt-2">Target-aligned purity expectation for the selected process window.</p>
+            </div>
+        </div>
+        <div class="col-sm-6 col-xl-3">
+            <div class="result-kpi-card">
+                <p class="kpi-label">Estimated Recovery</p>
+                <div id="estimatedRecoveryKpi" class="kpi-value">-</div>
+                <p class="text-secondary small mb-0 mt-2">Indicative recovery level inferred from the recommendation score.</p>
+            </div>
+        </div>
+        <div class="col-sm-6 col-xl-3">
+            <div class="result-kpi-card">
+                <p class="kpi-label">Operating Simplicity</p>
+                <div id="operatingSimplicityKpi" class="kpi-value">-</div>
+                <p class="text-secondary small mb-0 mt-2">Ease of operation for day-to-day plant execution.</p>
+            </div>
+        </div>
+        <div class="col-sm-6 col-xl-3">
+            <div class="result-kpi-card">
+                <p class="kpi-label">Energy Demand</p>
+                <div id="energyDemandKpi" class="kpi-value">-</div>
+                <p class="text-secondary small mb-0 mt-2">Indicative operating energy intensity of the preferred method.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="mb-4">
+    <div class="app-card p-4">
+        <div class="app-card-header px-0 pt-0">
+            <div class="d-flex align-items-center gap-3">
+                <div class="icon-tile">
+                    <i class="fa-solid fa-sliders"></i>
+                </div>
+                <div>
+                    <h2 class="app-card-title">Input Summary</h2>
+                    <p class="text-secondary mb-0">Key operating parameters used for the recommendation.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="mb-4">
+            <p class="text-secondary text-uppercase small fw-semibold mb-2">Gas Composition</p>
+            <div id="gasMixtureDisplay" class="d-flex flex-wrap gap-2"></div>
+        </div>
+
+        <div class="row g-3">
+            <div class="col-sm-6 col-xl">
+                <div class="input-summary-card">
+                    <p class="summary-label">Temperature</p>
+                    <div id="tempParam" class="summary-value">-</div>
+                </div>
+            </div>
+            <div class="col-sm-6 col-xl">
+                <div class="input-summary-card">
+                    <p class="summary-label">Pressure</p>
+                    <div id="pressureParam" class="summary-value">-</div>
+                </div>
+            </div>
+            <div class="col-sm-6 col-xl">
+                <div class="input-summary-card">
+                    <p class="summary-label">Flow Rate</p>
+                    <div id="flowRateParam" class="summary-value">-</div>
+                </div>
+            </div>
+            <div class="col-sm-6 col-xl">
+                <div class="input-summary-card">
+                    <p class="summary-label">Desired Purity</p>
+                    <div id="purityParam" class="summary-value">-</div>
+                </div>
+            </div>
+            <div class="col-sm-6 col-xl">
+                <div class="input-summary-card">
+                    <p class="summary-label">Impurity to Remove</p>
+                    <div id="impurityParam" class="summary-value">-</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="mb-4">
+    <div class="chart-panel">
+        <div class="chart-header">
+            <div class="d-flex align-items-center gap-3">
+                <div class="icon-tile">
+                    <i class="fa-solid fa-chart-column"></i>
+                </div>
+                <div>
+                    <h2 class="app-card-title mb-1">Method Score Comparison</h2>
+                    <p class="text-secondary mb-0">Score-based view of how each purification option fits the operating scenario.</p>
+                </div>
+            </div>
+        </div>
+        <div id="scoresChart" class="chart-frame"></div>
+    </div>
+</section>
+
+<section class="mb-4">
+    <div class="d-flex align-items-center justify-content-between gap-3 flex-wrap mb-3">
+        <div>
+            <div class="section-label mb-2">
+                <i class="fa-solid fa-layer-group"></i>
+                Method Comparison
+            </div>
+            <h2 class="fw-bold mb-1">Detailed Method Breakdown</h2>
+            <p class="text-secondary mb-0">Score, suitability and key trade-offs for each purification method.</p>
+        </div>
+    </div>
+    <div id="methodsGrid" class="row g-4"></div>
+</section>
+{% else %}
+<section class="page-hero text-center">
+    <div class="section-label justify-content-center">
+        <i class="fa-solid fa-circle-exclamation"></i>
+        No Results Available
+    </div>
+    <h1 class="display-6 fw-bold mb-3">Run an analysis to view your dashboard</h1>
+    <p class="lead text-secondary mx-auto mb-4" style="max-width: 720px;">
+        The recommendation dashboard appears here after you submit gas mixture and operating data.
+    </p>
+    <a href="{{ url_for('input_page') }}" class="btn btn-primary btn-lg">
+        <i class="fa-solid fa-pen-to-square me-2"></i>Go to Input Page
+    </a>
+</section>
+{% endif %}
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const formDataStr = {{ form_data | tojson }};
+    const comparisonResultsStr = {{ comparison_results | tojson }};
+
+    if (!formDataStr || formDataStr === 'null' || !comparisonResultsStr || comparisonResultsStr === 'null') {
+        return;
+    }
+
+    try {
+        const formData = JSON.parse(formDataStr);
+        const results = JSON.parse(comparisonResultsStr);
+
+        displayHeroRecommendation(results);
+        displayInputSummary(formData);
+        displayKpis(formData, results);
+        displayScoresChart(results.scores, results.best_method);
+        displayMethodCards(results);
+    } catch (error) {
+        console.error('Error parsing comparison data:', error);
+    }
+});
+
+function displayHeroRecommendation(results) {
+    const bestMethod = results.best_method || '-';
+    const bestScore = Number(results.best_score || 0);
+    const recommendation = (results.recommendations || {})[bestMethod] || {};
+    const suitability = normalizeSuitability(recommendation.suitability || 'Medium');
+    const suitabilityBadge = document.getElementById('bestMethodSuitability');
+
+    document.getElementById('bestMethodName').textContent = bestMethod;
+    document.getElementById('bestMethodExplanation').textContent = results.explanation || '-';
+    document.getElementById('bestMethodScore').textContent = bestScore ? bestScore.toFixed(1) : '-';
+
+    suitabilityBadge.textContent = suitability + ' Suitability';
+    suitabilityBadge.className = 'badge result-suitability-badge ' + getSuitabilityBadgeClass(suitability);
+}
+
+function displayInputSummary(formData) {
+    const gasMixture = Array.isArray(formData.gas_mixture) ? formData.gas_mixture : [];
+    const gasMixtureDisplay = document.getElementById('gasMixtureDisplay');
+
+    gasMixtureDisplay.innerHTML = gasMixture.map(function(gas) {
+        const name = escapeHtml(gas.name || 'Unknown');
+        const percentage = Number(gas.percentage || 0).toFixed(2);
+        return '<span class="gas-chip"><i class="fa-solid fa-circle"></i>' + name + ': ' + percentage + '%</span>';
+    }).join('');
+
+    document.getElementById('tempParam').textContent = formatNumber(formData.temperature) + ' C';
+    document.getElementById('pressureParam').textContent = formatNumber(formData.pressure) + ' bar';
+    document.getElementById('flowRateParam').textContent = formatNumber(formData.flowRate) + ' m3/h';
+    document.getElementById('purityParam').textContent = formatNumber(formData.desiredPurity) + '%';
+    document.getElementById('impurityParam').textContent = escapeHtml(formData.impurityToRemove || '-');
+}
+
+function displayKpis(formData, results) {
+    const bestScore = Number(results.best_score || 0);
+    const bestMethod = results.best_method || '';
+
+    document.getElementById('estimatedPurityKpi').textContent = formatNumber(formData.desiredPurity) + '%';
+    document.getElementById('estimatedRecoveryKpi').textContent = estimateRecovery(bestScore) + '%';
+    document.getElementById('operatingSimplicityKpi').textContent = getOperatingSimplicity(bestMethod);
+    document.getElementById('energyDemandKpi').textContent = getEnergyDemandLevel(bestMethod);
+}
+
+function displayMethodCards(results) {
+    const methodsGrid = document.getElementById('methodsGrid');
+    const methods = ['Absorption', 'Adsorption', 'Membrane'];
+    const recommendations = results.recommendations || {};
+    const scores = results.scores || {};
+    const bestMethod = results.best_method || '';
+
+    methodsGrid.innerHTML = methods.map(function(method) {
+        const data = recommendations[method] || { suitability: 'Medium', advantages: [], limitations: [] };
+        const suitability = normalizeSuitability(data.suitability || 'Medium');
+        const score = Number(scores[method] || 0);
+        const isBest = method === bestMethod;
+        const advantages = (data.advantages || []).slice(0, 3).map(function(item) {
+            return '<li><i class="fa-solid fa-circle-check text-success mt-1"></i><span>' + escapeHtml(item) + '</span></li>';
+        }).join('');
+        const limitations = (data.limitations || []).slice(0, 3).map(function(item) {
+            return '<li><i class="fa-solid fa-circle-exclamation text-warning mt-1"></i><span>' + escapeHtml(item) + '</span></li>';
+        }).join('');
+
+        return `
+            <div class="col-lg-4">
+                <div class="method-card ${isBest ? 'best-method' : ''}">
+                    <div class="p-4">
+                        <div class="d-flex justify-content-between align-items-start gap-3 mb-4">
+                            <div>
+                                <p class="text-secondary text-uppercase small fw-semibold mb-2">${escapeHtml(method)}</p>
+                                <div class="method-score mb-2">${score.toFixed(1)}</div>
+                                <p class="method-subtitle mb-0">Score out of 100</p>
+                            </div>
+                            <div class="d-flex flex-column align-items-end gap-2">
+                                <span class="method-pill ${getSuitabilityPillClass(suitability)}">${suitability}</span>
+                                ${isBest ? '<span class="best-method-ribbon"><i class="fa-solid fa-star me-2"></i>Best Match</span>' : ''}
+                            </div>
+                        </div>
+
+                        <div class="mb-4">
+                            <p class="fw-semibold mb-3">Advantages</p>
+                            <ul class="method-list">${advantages || '<li><i class="fa-solid fa-circle-minus text-secondary mt-1"></i><span>No details available.</span></li>'}</ul>
+                        </div>
+
+                        <div>
+                            <p class="fw-semibold mb-3">Limitations</p>
+                            <ul class="method-list">${limitations || '<li><i class="fa-solid fa-circle-minus text-secondary mt-1"></i><span>No details available.</span></li>'}</ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+    }).join('');
+}
+
+function displayScoresChart(scores, bestMethod) {
+    const methods = ['Absorption', 'Adsorption', 'Membrane'];
+    const values = methods.map(function(method) {
+        return Number(scores[method] || 0);
+    });
+    const colors = methods.map(function(method) {
+        return method === bestMethod ? '#0d6efd' : '#9ec5fe';
+    });
+
+    Plotly.newPlot('scoresChart', [{
+        x: methods,
+        y: values,
+        type: 'bar',
+        marker: {
+            color: colors,
+            line: {
+                color: '#0b5ed7',
+                width: 1.4
+            }
+        },
+        text: values.map(function(value) {
+            return value.toFixed(1);
+        }),
+        textposition: 'outside',
+        hovertemplate: '<b>%{x}</b><br>Score: %{y:.1f}/100<extra></extra>'
+    }], {
+        margin: { t: 25, r: 15, b: 60, l: 55 },
+        paper_bgcolor: 'rgba(0,0,0,0)',
+        plot_bgcolor: '#f8fbff',
+        xaxis: {
+            title: 'Method',
+            tickfont: { size: 12 }
+        },
+        yaxis: {
+            title: 'Score',
+            range: [0, 105],
+            gridcolor: '#e3edf8'
+        }
+    }, {
+        responsive: true,
+        displayModeBar: false
+    });
+}
+
+function normalizeSuitability(value) {
+    const normalized = String(value || '').toLowerCase();
+    if (normalized === 'moderate') {
+        return 'Medium';
+    }
+    if (normalized === 'high') {
+        return 'High';
+    }
+    if (normalized === 'low') {
+        return 'Low';
+    }
+    return 'Medium';
+}
+
+function getSuitabilityBadgeClass(suitability) {
+    if (suitability === 'High') {
+        return 'text-bg-success';
+    }
+    if (suitability === 'Medium') {
+        return 'text-bg-warning';
+    }
+    return 'text-bg-secondary';
+}
+
+function getSuitabilityPillClass(suitability) {
+    if (suitability === 'High') {
+        return 'text-bg-success';
+    }
+    if (suitability === 'Medium') {
+        return 'text-bg-warning';
+    }
+    return 'text-bg-secondary';
+}
+
+function estimateRecovery(score) {
+    const recovery = Math.min(99, Math.max(50, 60 + score * 0.35));
+    return recovery.toFixed(1);
+}
+
+function getOperatingSimplicity(method) {
+    const simplicityMap = {
+        'Absorption': 'Medium',
+        'Adsorption': 'Medium',
+        'Membrane': 'High'
+    };
+    return simplicityMap[method] || 'Medium';
+}
+
+function getEnergyDemandLevel(method) {
+    const energyMap = {
+        'Absorption': 'Medium',
+        'Adsorption': 'Medium',
+        'Membrane': 'Low'
+    };
+    return energyMap[method] || 'Medium';
+}
+
+function formatNumber(value) {
+    const numericValue = Number(value);
+    return Number.isFinite(numericValue) ? numericValue.toFixed(2) : '-';
+}
+
+function escapeHtml(text) {
+    const map = {
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        '"': '&quot;',
+        "'": '&#039;'
+    };
+
+    return String(text).replace(/[&<>"']/g, function(character) {
+        return map[character];
+    });
+}
+
+window.addEventListener('resize', function() {
+    const chartElement = document.getElementById('scoresChart');
+    if (chartElement) {
+        Plotly.Plots.resize(chartElement);
+    }
+});
+</script>
+{% endblock %}
+```

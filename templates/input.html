@@ -1,0 +1,232 @@
+{% extends "base.html" %}
+
+{% block title %}Input | Gas Purification Simulator{% endblock %}
+
+{% block content %}
+<section class="page-hero text-center mb-5">
+    <div class="section-label justify-content-center">
+        <i class="fa-solid fa-sliders"></i>
+        Input Workspace
+    </div>
+    <h1 class="display-5 fw-bold mb-3">Enter Gas Mixture Parameters</h1>
+    <p class="lead text-secondary mx-auto mb-0" style="max-width: 760px;">
+        Provide gas composition, operating conditions and purification targets to generate a method recommendation.
+    </p>
+</section>
+
+<div class="row justify-content-center">
+    <div class="col-xl-10">
+        <form id="inputForm" method="POST" action="{{ url_for('input_page') }}">
+            <div class="app-card mb-4">
+                <div class="app-card-header">
+                    <div class="d-flex align-items-center gap-3">
+                        <div class="icon-tile">
+                            <i class="fa-solid fa-circle-nodes"></i>
+                        </div>
+                        <div>
+                            <h2 class="app-card-title">Gas Composition</h2>
+                            <p class="text-secondary mb-0">Define each gas and its percentage in the mixture.</p>
+                        </div>
+                    </div>
+                    <span class="soft-badge">
+                        <i class="fa-solid fa-percent"></i>
+                        Total: <span id="totalValue">0.00</span>%
+                    </span>
+                </div>
+
+                <div id="gasesContainer">
+                    <div class="gas-entry border rounded-4 p-3 bg-light mb-3">
+                        <div class="row g-3 align-items-end">
+                            <div class="col-md-8">
+                                <label for="gasName_0" class="form-label">Gas Name</label>
+                                <input type="text" class="form-control gas-name" id="gasName_0" name="gas_names" placeholder="e.g. CO2, N2, O2, NO2" required>
+                            </div>
+                            <div class="col-md-4">
+                                <label for="gasPercentage_0" class="form-label">Percentage (%)</label>
+                                <input type="number" class="form-control gas-percentage" id="gasPercentage_0" name="gas_percentages" min="0" max="100" step="0.01" required>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 mt-4">
+                    <p class="text-secondary mb-0">Add as many gas components as needed for your scenario.</p>
+                    <button type="button" class="btn btn-outline-primary" id="addGasBtn">
+                        <i class="fa-solid fa-plus me-2"></i>Add Gas
+                    </button>
+                </div>
+            </div>
+
+            <div class="row g-4 mb-4">
+                <div class="col-lg-7">
+                    <div class="app-card h-100">
+                        <div class="app-card-header">
+                            <div class="d-flex align-items-center gap-3">
+                                <div class="icon-tile">
+                                    <i class="fa-solid fa-gauge-high"></i>
+                                </div>
+                                <div>
+                                    <h2 class="app-card-title">Operating Conditions</h2>
+                                    <p class="text-secondary mb-0">Set the core process variables for the comparison.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label for="temperature" class="form-label">Temperature (&deg;C)</label>
+                                <input type="number" class="form-control" id="temperature" name="temperature" min="-273" step="0.1" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="pressure" class="form-label">Pressure (bar)</label>
+                                <input type="number" class="form-control" id="pressure" name="pressure" min="0" step="0.01" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="flowRate" class="form-label">Flow Rate (m3/h)</label>
+                                <input type="number" class="form-control" id="flowRate" name="flowRate" min="0" step="0.1" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="desiredPurity" class="form-label">Desired Purity (%)</label>
+                                <input type="number" class="form-control" id="desiredPurity" name="desiredPurity" min="0" max="100" step="0.1" required>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-5">
+                    <div class="app-card h-100">
+                        <div class="app-card-header">
+                            <div class="d-flex align-items-center gap-3">
+                                <div class="icon-tile">
+                                    <i class="fa-solid fa-bullseye"></i>
+                                </div>
+                                <div>
+                                    <h2 class="app-card-title">Purification Target</h2>
+                                    <p class="text-secondary mb-0">Define which impurity should be removed.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="impurityToRemove" class="form-label">Impurity to Remove</label>
+                            <input type="text" class="form-control" id="impurityToRemove" name="impurityToRemove" placeholder="e.g. CO2, H2S, NO2" required>
+                        </div>
+
+                        <div class="p-3 rounded-4 bg-light border">
+                            <h3 class="h6 fw-bold mb-2">Tips</h3>
+                            <p class="text-secondary small mb-2">Keep total composition close to 100% for the clearest interpretation.</p>
+                            <p class="text-secondary small mb-0">Use consistent units so the recommendation matches the real operating window.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="app-card">
+                <div class="d-flex justify-content-center gap-3 flex-wrap">
+                    <button type="reset" class="btn btn-outline-secondary px-4">
+                        <i class="fa-solid fa-rotate-left me-2"></i>Clear Form
+                    </button>
+                    <button type="submit" class="btn btn-primary px-4">
+                        <i class="fa-solid fa-magnifying-glass-chart me-2"></i>Submit and Analyze
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.getElementById('inputForm');
+    const gasesContainer = document.getElementById('gasesContainer');
+    const addGasBtn = document.getElementById('addGasBtn');
+    const totalValue = document.getElementById('totalValue');
+    let gasCount = 1;
+
+    function updateTotalPercentage() {
+        const percentages = gasesContainer.querySelectorAll('.gas-percentage');
+        let total = 0;
+        percentages.forEach(function(input) {
+            total += parseFloat(input.value) || 0;
+        });
+        totalValue.textContent = total.toFixed(2);
+    }
+
+    function buildGasEntry(index) {
+        return `
+            <div class="gas-entry border rounded-4 p-3 bg-light mb-3">
+                <div class="row g-3 align-items-end">
+                    <div class="col-md-7">
+                        <label for="gasName_${index}" class="form-label">Gas Name</label>
+                        <input type="text" class="form-control gas-name" id="gasName_${index}" name="gas_names" placeholder="e.g. CO2, N2, O2, NO2" required>
+                    </div>
+                    <div class="col-md-3">
+                        <label for="gasPercentage_${index}" class="form-label">Percentage (%)</label>
+                        <input type="number" class="form-control gas-percentage" id="gasPercentage_${index}" name="gas_percentages" min="0" max="100" step="0.01" required>
+                    </div>
+                    <div class="col-md-2 d-grid">
+                        <button type="button" class="btn btn-outline-danger remove-gas-btn">
+                            <i class="fa-solid fa-trash me-2"></i>Remove
+                        </button>
+                    </div>
+                </div>
+            </div>
+        `;
+    }
+
+    addGasBtn.addEventListener('click', function() {
+        gasesContainer.insertAdjacentHTML('beforeend', buildGasEntry(gasCount));
+        gasCount += 1;
+    });
+
+    gasesContainer.addEventListener('click', function(event) {
+        const removeButton = event.target.closest('.remove-gas-btn');
+        if (!removeButton) {
+            return;
+        }
+
+        const entry = removeButton.closest('.gas-entry');
+        if (entry) {
+            entry.remove();
+            updateTotalPercentage();
+        }
+    });
+
+    gasesContainer.addEventListener('input', function(event) {
+        if (event.target.classList.contains('gas-percentage')) {
+            updateTotalPercentage();
+        }
+    });
+
+    form.addEventListener('submit', function(event) {
+        const gasNames = Array.from(document.querySelectorAll('.gas-name')).filter(function(input) {
+            return input.value.trim() !== '';
+        });
+
+        if (gasNames.length === 0) {
+            event.preventDefault();
+            alert('Please add at least one gas component.');
+            return;
+        }
+
+        const requiredFieldIds = ['temperature', 'pressure', 'flowRate', 'impurityToRemove', 'desiredPurity'];
+        const missingField = requiredFieldIds.find(function(id) {
+            return !document.getElementById(id).value;
+        });
+
+        if (missingField) {
+            event.preventDefault();
+            alert('Please complete all required fields before submitting.');
+        }
+    });
+
+    form.addEventListener('reset', function() {
+        window.setTimeout(updateTotalPercentage, 0);
+    });
+
+    updateTotalPercentage();
+});
+</script>
+{% endblock %}

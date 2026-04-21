@@ -1,0 +1,877 @@
+{% extends "base.html" %}
+
+{% block title %}Simulation | Gas Purification Simulator{% endblock %}
+
+{% block extra_css %}
+<style>
+    .simulation-kpi-card {
+        background: #ffffff;
+        border: 1px solid #e3edf8;
+        border-radius: 1.25rem;
+        box-shadow: 0 12px 28px rgba(15, 23, 42, 0.05);
+        padding: 1.15rem 1.2rem;
+        height: 100%;
+    }
+
+    .simulation-kpi-card .kpi-label {
+        font-size: 0.76rem;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: #6b7a90;
+        margin-bottom: 0.45rem;
+    }
+
+    .simulation-kpi-card .kpi-value {
+        font-size: 1.55rem;
+        font-weight: 800;
+        line-height: 1.1;
+        color: #0f172a;
+    }
+
+    .simulation-setup-card,
+    .simulation-chart-card,
+    .simulation-status-card,
+    .simulation-flow-card,
+    .simulation-case-card {
+        background: #ffffff;
+        border: 1px solid #e3edf8;
+        border-radius: 1.35rem;
+        box-shadow: 0 14px 30px rgba(15, 23, 42, 0.05);
+        overflow: hidden;
+    }
+
+    .simulation-chart-card .chart-frame {
+        min-height: 330px;
+    }
+
+    .simulation-column-card {
+        border: 1px solid #e3edf8;
+        border-radius: 1.2rem;
+        padding: 1.2rem;
+        background: #ffffff;
+        height: 100%;
+        transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+    }
+
+    .simulation-column-card.active-column {
+        border-color: rgba(13, 110, 253, 0.45);
+        box-shadow: 0 16px 32px rgba(13, 110, 253, 0.14);
+        transform: translateY(-2px);
+    }
+
+    .simulation-state-badge {
+        border-radius: 999px;
+        padding: 0.45rem 0.8rem;
+        font-size: 0.8rem;
+        font-weight: 700;
+    }
+
+    .simulation-process-node {
+        border: 1px solid #e3edf8;
+        border-radius: 1.2rem;
+        background: #ffffff;
+        height: 100%;
+        box-shadow: 0 10px 22px rgba(15, 23, 42, 0.04);
+    }
+
+    .simulation-process-node.active-node {
+        border-color: rgba(13, 110, 253, 0.45);
+        box-shadow: 0 16px 32px rgba(13, 110, 253, 0.14);
+    }
+
+    .simulation-arrow-badge {
+        width: 2.75rem;
+        height: 2.75rem;
+        border-radius: 999px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        background: rgba(13, 110, 253, 0.1);
+        color: #0d6efd;
+        font-size: 1rem;
+    }
+
+    .simulation-heater-card {
+        border: 1px dashed rgba(13, 110, 253, 0.35);
+        border-radius: 1.2rem;
+        background: linear-gradient(135deg, #fffaf2 0%, #ffffff 100%);
+    }
+
+    .simulation-note-card {
+        border-radius: 1rem;
+        background: rgba(13, 110, 253, 0.06);
+        border: 1px solid rgba(13, 110, 253, 0.12);
+    }
+
+    @media (max-width: 991.98px) {
+        .simulation-arrow-stack {
+            min-height: auto !important;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<section class="page-hero mb-4">
+    <div class="section-label">
+        <i class="fa-solid fa-wave-square"></i>
+        Process Simulation
+    </div>
+    <h1 class="display-5 fw-bold mb-3">Process Simulation</h1>
+    <p class="lead text-secondary mb-0" style="max-width: 760px;">
+        Dynamic visualization of purification performance over time
+    </p>
+</section>
+
+<section class="mb-4">
+    <div class="row g-4">
+        <div class="col-sm-6 col-xl-2">
+            <div class="simulation-kpi-card">
+                <p class="kpi-label">Cycle Duration</p>
+                <div id="cycleDurationKpi" class="kpi-value">-</div>
+            </div>
+        </div>
+        <div class="col-sm-6 col-xl-2">
+            <div class="simulation-kpi-card">
+                <p class="kpi-label">Adsorption Time</p>
+                <div id="adsorptionTimeKpi" class="kpi-value">-</div>
+            </div>
+        </div>
+        <div class="col-sm-6 col-xl-2">
+            <div class="simulation-kpi-card">
+                <p class="kpi-label">Regeneration Time</p>
+                <div id="regenerationTimeKpi" class="kpi-value">-</div>
+            </div>
+        </div>
+        <div class="col-sm-6 col-xl-2">
+            <div class="simulation-kpi-card">
+                <p class="kpi-label">Cool-down Time</p>
+                <div id="cooldownTimeKpi" class="kpi-value">-</div>
+            </div>
+        </div>
+        <div class="col-sm-6 col-xl-2">
+            <div class="simulation-kpi-card">
+                <p class="kpi-label">Final Purity</p>
+                <div id="finalPurityKpi" class="kpi-value">-</div>
+            </div>
+        </div>
+        <div class="col-sm-6 col-xl-2">
+            <div class="simulation-kpi-card">
+                <p class="kpi-label">Final Efficiency</p>
+                <div id="finalEfficiencyKpi" class="kpi-value">-</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="mb-4">
+    <div class="row g-4">
+        <div class="col-xl-5">
+            <div class="simulation-setup-card h-100 p-4">
+                <div class="app-card-header px-0 pt-0">
+                    <div class="d-flex align-items-center gap-3">
+                        <div class="icon-tile">
+                            <i class="fa-solid fa-sliders"></i>
+                        </div>
+                        <div>
+                            <h2 class="app-card-title">Simulation Setup</h2>
+                            <p class="text-secondary mb-0">Configure the operating window for the dynamic preview.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <form id="simulationForm" method="POST" action="{{ url_for('simulation') }}">
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label for="simMethod" class="form-label">Purification Method</label>
+                            <select class="form-select" id="simMethod" name="method" required>
+                                <option value="">Select a method</option>
+                                <option value="Absorption">Absorption</option>
+                                <option value="Adsorption">Adsorption</option>
+                                <option value="Membrane">Membrane</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="duration" class="form-label">Cycle Duration (hours)</label>
+                            <input type="number" class="form-control" id="duration" name="duration" min="0.5" max="24" step="0.5" value="4" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="simTemperature" class="form-label">Temperature (&deg;C)</label>
+                            <input type="number" class="form-control" id="simTemperature" name="temperature" min="-273" step="1" value="25" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="simPressure" class="form-label">Pressure (bar)</label>
+                            <input type="number" class="form-control" id="simPressure" name="pressure" min="0" step="0.1" value="1.0" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="simFlowRate" class="form-label">Flow Rate (m3/h)</label>
+                            <input type="number" class="form-control" id="simFlowRate" name="flowRate" min="0" step="1" value="100" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="simPurity" class="form-label">Target Purity (%)</label>
+                            <input type="number" class="form-control" id="simPurity" name="desiredPurity" min="0" max="100" step="0.1" value="95" required>
+                        </div>
+                        <div class="col-12">
+                            <label for="simImpurity" class="form-label">Impurity to Remove</label>
+                            <input type="text" class="form-control" id="simImpurity" name="impurityToRemove" placeholder="e.g. CO2, H2S, NO2" required>
+                        </div>
+                    </div>
+
+                    <div class="simulation-note-card p-3 mt-4">
+                        <p class="fw-semibold mb-1">Preview mode</p>
+                        <p class="text-secondary mb-0 small">
+                            The dashboard below previews expected system behavior while the submitted simulation continues to use the existing backend logic.
+                        </p>
+                    </div>
+
+                    <div class="d-flex gap-3 flex-wrap mt-4">
+                        <a href="{{ url_for('input_page') }}" class="btn btn-outline-secondary">
+                            <i class="fa-solid fa-arrow-left me-2"></i>Back to Input
+                        </a>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fa-solid fa-play me-2"></i>Run Simulation
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div class="col-xl-7">
+            <div class="simulation-flow-card h-100 p-4">
+                <div class="app-card-header px-0 pt-0">
+                    <div class="d-flex align-items-center gap-3">
+                        <div class="icon-tile">
+                            <i class="fa-solid fa-diagram-project"></i>
+                        </div>
+                        <div>
+                            <h2 class="app-card-title">Process Flow</h2>
+                            <p class="text-secondary mb-0">Feed Gas to dual TSA columns with purified outlet and regeneration heater loop.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row g-3 align-items-stretch mb-3">
+                    <div class="col-lg-3">
+                        <div class="simulation-process-node h-100">
+                            <div class="card-body text-center d-flex flex-column justify-content-center h-100 p-4">
+                                <div class="text-primary fs-3 mb-3">
+                                    <i class="fa-solid fa-arrow-right-to-bracket"></i>
+                                </div>
+                                <p class="text-secondary text-uppercase small mb-1">Inlet</p>
+                                <h3 class="h5 fw-bold mb-2">Feed Gas</h3>
+                                <p class="text-secondary small mb-0">Incoming gas mixture enters the TSA train.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-1">
+                        <div class="d-flex h-100 align-items-center justify-content-center simulation-arrow-stack" style="min-height: 100%;">
+                            <span class="simulation-arrow-badge">
+                                <i class="fa-solid fa-arrow-right"></i>
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4">
+                        <div id="processColumnA" class="simulation-process-node h-100">
+                            <div class="card-body p-4">
+                                <div class="d-flex justify-content-between align-items-start gap-2 mb-3">
+                                    <div>
+                                        <p class="text-secondary text-uppercase small mb-1">Column A</p>
+                                        <h3 class="h5 fw-bold mb-0">Adsorption Column</h3>
+                                    </div>
+                                    <span id="processColumnABadge" class="badge simulation-state-badge text-bg-secondary">-</span>
+                                </div>
+                                <p id="processColumnADescription" class="text-secondary small mb-3">-</p>
+                                <div class="progress" style="height: 8px;">
+                                    <div id="processColumnAProgress" class="progress-bar bg-primary" role="progressbar" style="width: 0%;"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4">
+                        <div id="processColumnB" class="simulation-process-node h-100">
+                            <div class="card-body p-4">
+                                <div class="d-flex justify-content-between align-items-start gap-2 mb-3">
+                                    <div>
+                                        <p class="text-secondary text-uppercase small mb-1">Column B</p>
+                                        <h3 class="h5 fw-bold mb-0">Adsorption Column</h3>
+                                    </div>
+                                    <span id="processColumnBBadge" class="badge simulation-state-badge text-bg-secondary">-</span>
+                                </div>
+                                <p id="processColumnBDescription" class="text-secondary small mb-3">-</p>
+                                <div class="progress" style="height: 8px;">
+                                    <div id="processColumnBProgress" class="progress-bar bg-primary" role="progressbar" style="width: 0%;"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row g-3 align-items-center">
+                    <div class="col-lg-8">
+                        <div class="simulation-heater-card p-4 h-100">
+                            <div class="row g-3 align-items-center">
+                                <div class="col-md-4 text-center">
+                                    <span class="badge rounded-pill text-bg-warning px-3 py-2 mb-2">Regeneration Loop</span>
+                                    <h3 class="h6 fw-bold mb-1">Spent Bed Outlet</h3>
+                                    <p class="text-secondary small mb-0">Impurities leave during regeneration and cooling.</p>
+                                </div>
+                                <div class="col-md-4 text-center">
+                                    <div class="text-warning fs-3 mb-2">
+                                        <i class="fa-solid fa-fire-flame-curved"></i>
+                                    </div>
+                                    <h3 class="h6 fw-bold mb-1">Heater</h3>
+                                    <p class="text-secondary small mb-0">Thermal swing restores adsorption capacity.</p>
+                                </div>
+                                <div class="col-md-4 text-center">
+                                    <span class="badge rounded-pill text-bg-info px-3 py-2 mb-2">Return Path</span>
+                                    <h3 class="h6 fw-bold mb-1">Reconditioned Bed</h3>
+                                    <p class="text-secondary small mb-0">Column cycles back into service for the next pass.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="simulation-process-node h-100">
+                            <div class="card-body text-center d-flex flex-column justify-content-center h-100 p-4">
+                                <div class="text-success fs-3 mb-3">
+                                    <i class="fa-solid fa-arrow-right-from-bracket"></i>
+                                </div>
+                                <p class="text-secondary text-uppercase small mb-1">Outlet</p>
+                                <h3 class="h5 fw-bold mb-2">Purified Gas</h3>
+                                <p class="text-secondary small mb-0">Continuous product stream exits the active adsorption path.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="mb-4">
+    <div class="row g-4">
+        <div class="col-lg-6">
+            <div id="columnAStatusCard" class="simulation-status-card h-100 p-4">
+                <div class="app-card-header px-0 pt-0">
+                    <div class="d-flex align-items-center gap-3">
+                        <div class="icon-tile">
+                            <i class="fa-solid fa-columns"></i>
+                        </div>
+                        <div>
+                            <h2 class="app-card-title">Column A</h2>
+                            <p id="columnANote" class="text-secondary mb-0">-</p>
+                        </div>
+                    </div>
+                    <span id="columnABadge" class="badge simulation-state-badge text-bg-secondary">-</span>
+                </div>
+                <div class="row g-3">
+                    <div class="col-sm-6">
+                        <div class="simulation-note-card p-3 h-100">
+                            <p class="text-secondary text-uppercase small mb-1">Progress</p>
+                            <div id="columnAProgressValue" class="fw-bold">-</div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="simulation-note-card p-3 h-100">
+                            <p class="text-secondary text-uppercase small mb-1">Current Temperature</p>
+                            <div id="columnATemperature" class="fw-bold">-</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div id="columnBStatusCard" class="simulation-status-card h-100 p-4">
+                <div class="app-card-header px-0 pt-0">
+                    <div class="d-flex align-items-center gap-3">
+                        <div class="icon-tile">
+                            <i class="fa-solid fa-columns"></i>
+                        </div>
+                        <div>
+                            <h2 class="app-card-title">Column B</h2>
+                            <p id="columnBNote" class="text-secondary mb-0">-</p>
+                        </div>
+                    </div>
+                    <span id="columnBBadge" class="badge simulation-state-badge text-bg-secondary">-</span>
+                </div>
+                <div class="row g-3">
+                    <div class="col-sm-6">
+                        <div class="simulation-note-card p-3 h-100">
+                            <p class="text-secondary text-uppercase small mb-1">Progress</p>
+                            <div id="columnBProgressValue" class="fw-bold">-</div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="simulation-note-card p-3 h-100">
+                            <p class="text-secondary text-uppercase small mb-1">Current Temperature</p>
+                            <div id="columnBTemperature" class="fw-bold">-</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="mb-4">
+    <div class="row g-4">
+        <div class="col-lg-6">
+            <div class="simulation-chart-card h-100">
+                <div class="app-card-header p-4 pb-0">
+                    <div class="d-flex align-items-center gap-3">
+                        <div class="icon-tile">
+                            <i class="fa-solid fa-chart-line"></i>
+                        </div>
+                        <div>
+                            <h2 class="app-card-title">Purity vs Time</h2>
+                            <p class="text-secondary mb-0">Predicted purity response across the selected cycle duration.</p>
+                        </div>
+                    </div>
+                </div>
+                <div id="previewPurityChart" class="chart-frame"></div>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="simulation-chart-card h-100">
+                <div class="app-card-header p-4 pb-0">
+                    <div class="d-flex align-items-center gap-3">
+                        <div class="icon-tile">
+                            <i class="fa-solid fa-bolt"></i>
+                        </div>
+                        <div>
+                            <h2 class="app-card-title">Efficiency vs Time</h2>
+                            <p class="text-secondary mb-0">System efficiency trend over the simulated operating window.</p>
+                        </div>
+                    </div>
+                </div>
+                <div id="previewEfficiencyChart" class="chart-frame"></div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="mb-4">
+    <div class="simulation-chart-card">
+        <div class="app-card-header p-4 pb-0">
+            <div class="d-flex align-items-center gap-3">
+                <div class="icon-tile">
+                    <i class="fa-solid fa-temperature-three-quarters"></i>
+                </div>
+                <div>
+                    <h2 class="app-card-title">Temperature vs Time</h2>
+                    <p class="text-secondary mb-0">Column temperature profiles during adsorption, regeneration and cooling.</p>
+                </div>
+            </div>
+        </div>
+        <div id="previewTemperatureChart" class="chart-frame"></div>
+    </div>
+</section>
+
+<section class="mb-4">
+    <div class="row g-4">
+        <div class="col-xl-7">
+            <div class="simulation-case-card h-100 p-4">
+                <div class="app-card-header px-0 pt-0">
+                    <div class="d-flex align-items-center gap-3">
+                        <div class="icon-tile">
+                            <i class="fa-solid fa-flask"></i>
+                        </div>
+                        <div>
+                            <h2 class="app-card-title">Case Study: H2/CO Purification by TSA</h2>
+                            <p class="text-secondary mb-0">
+                                {% if case_study_dashboard %}
+                                Stored case-study data is available for review alongside this simulation workspace.
+                                {% else %}
+                                Explore a dual-column TSA scenario to understand staggered adsorption and regeneration.
+                                {% endif %}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="simulation-note-card p-3 mb-3">
+                    <p class="text-secondary text-uppercase small mb-1">Scenario</p>
+                    <p class="mb-0">
+                        {% if case_study_dashboard %}
+                        {{ case_study_dashboard.summary }}
+                        {% else %}
+                        A two-column TSA system enriches the product stream by alternating one bed in adsorption while the other is heated for regeneration and then cooled for reuse.
+                        {% endif %}
+                    </p>
+                </div>
+
+                <div class="simulation-note-card p-3">
+                    <p class="text-secondary text-uppercase small mb-1">Main Engineering Insight</p>
+                    <p class="mb-0">
+                        Staggering the column duties supports continuous purified gas production while heater-assisted regeneration restores bed capacity in the background.
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-5">
+            <div class="simulation-case-card h-100 p-4">
+                <div class="app-card-header px-0 pt-0">
+                    <div class="d-flex align-items-center gap-3">
+                        <div class="icon-tile">
+                            <i class="fa-solid fa-industry"></i>
+                        </div>
+                        <div>
+                            <h2 class="app-card-title">Case Study Access</h2>
+                            <p class="text-secondary mb-0">Open the TSA dashboard for a deeper engineering review.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <ul class="list-unstyled mb-4">
+                    <li class="mb-2"><i class="fa-solid fa-circle-check text-success me-2"></i>Two parallel adsorption columns</li>
+                    <li class="mb-2"><i class="fa-solid fa-circle-check text-success me-2"></i>Heater-assisted regeneration cycle</li>
+                    <li class="mb-2"><i class="fa-solid fa-circle-check text-success me-2"></i>Cooling stage before reuse</li>
+                    <li class="mb-0"><i class="fa-solid fa-circle-check text-success me-2"></i>Continuous purified gas outlet concept</li>
+                </ul>
+
+                <a href="{{ url_for('case_study_simulation') }}" class="btn btn-outline-primary">
+                    <i class="fa-solid fa-arrow-up-right-from-square me-2"></i>Open TSA Case Study
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const simulationForm = document.getElementById('simulationForm');
+    const previewFields = ['simMethod', 'duration', 'simTemperature', 'simPressure', 'simFlowRate', 'simPurity', 'simImpurity'];
+
+    previewFields.forEach(function(fieldId) {
+        const field = document.getElementById(fieldId);
+        if (field) {
+            field.addEventListener('input', renderSimulationDashboard);
+            field.addEventListener('change', renderSimulationDashboard);
+        }
+    });
+
+    simulationForm.addEventListener('submit', function(event) {
+        const method = document.getElementById('simMethod').value;
+        const impurity = document.getElementById('simImpurity').value;
+
+        if (!method) {
+            event.preventDefault();
+            alert('Please select a purification method.');
+            return;
+        }
+
+        if (!impurity) {
+            event.preventDefault();
+            alert('Please specify the impurity to remove.');
+        }
+    });
+
+    renderSimulationDashboard();
+});
+
+function renderSimulationDashboard() {
+    const method = document.getElementById('simMethod').value || 'Absorption';
+    const duration = Number(document.getElementById('duration').value) || 4;
+    const baseTemperature = Number(document.getElementById('simTemperature').value) || 25;
+    const pressure = Number(document.getElementById('simPressure').value) || 1;
+    const flowRate = Number(document.getElementById('simFlowRate').value) || 100;
+    const targetPurity = Number(document.getElementById('simPurity').value) || 95;
+
+    const adsorptionTime = duration * 0.5;
+    const regenerationTime = duration * 0.3;
+    const cooldownTime = Math.max(0.1, duration - adsorptionTime - regenerationTime);
+
+    const preview = buildPreviewSeries({
+        method: method,
+        duration: duration,
+        baseTemperature: baseTemperature,
+        pressure: pressure,
+        flowRate: flowRate,
+        targetPurity: targetPurity,
+        adsorptionTime: adsorptionTime,
+        regenerationTime: regenerationTime,
+        cooldownTime: cooldownTime
+    });
+
+    updateKpis({
+        duration: duration,
+        adsorptionTime: adsorptionTime,
+        regenerationTime: regenerationTime,
+        cooldownTime: cooldownTime,
+        finalPurity: preview.finalPurity,
+        finalEfficiency: preview.finalEfficiency
+    });
+
+    updateColumnPanels(preview.columnA, preview.columnB);
+    updateProcessFlow(preview.columnA, preview.columnB);
+    renderPurityChart(preview);
+    renderEfficiencyChart(preview);
+    renderTemperatureChart(preview);
+}
+
+function buildPreviewSeries(config) {
+    const factors = {
+        'Absorption': 1.0,
+        'Adsorption': 1.12,
+        'Membrane': 0.92
+    };
+    const methodFactor = factors[config.method] || 1.0;
+    const steps = 60;
+    const initialPurity = Math.max(45, config.targetPurity - 28);
+    const temperaturePenalty = Math.abs(config.baseTemperature - 25) * 0.12;
+
+    const timeArray = [];
+    const purityArray = [];
+    const efficiencyArray = [];
+    const temperatureArrayA = [];
+    const temperatureArrayB = [];
+    const stateArrayA = [];
+    const stateArrayB = [];
+
+    let finalColumnA = null;
+    let finalColumnB = null;
+
+    for (let index = 0; index <= steps; index += 1) {
+        const time = config.duration * (index / steps);
+        const progress = 1 - Math.exp(-((1.8 + config.flowRate / 180 + config.pressure / 4) * methodFactor) * (index / steps));
+        const purity = Math.min(99.9, initialPurity + (config.targetPurity - initialPurity) * progress);
+        const efficiency = Math.max(35, 98 - temperaturePenalty - (index / steps) * (28 + config.flowRate / 20) / methodFactor);
+
+        const columnA = getColumnStatus(time, config);
+        const columnB = getColumnStatus((time + config.adsorptionTime) % config.duration, config);
+
+        timeArray.push(time);
+        purityArray.push(purity);
+        efficiencyArray.push(efficiency);
+        temperatureArrayA.push(columnA.temperature);
+        temperatureArrayB.push(columnB.temperature);
+        stateArrayA.push(columnA.state);
+        stateArrayB.push(columnB.state);
+
+        finalColumnA = columnA;
+        finalColumnB = columnB;
+    }
+
+    return {
+        timeArray: timeArray,
+        purityArray: purityArray,
+        efficiencyArray: efficiencyArray,
+        temperatureArrayA: temperatureArrayA,
+        temperatureArrayB: temperatureArrayB,
+        stateArrayA: stateArrayA,
+        stateArrayB: stateArrayB,
+        finalPurity: purityArray[purityArray.length - 1] || 0,
+        finalEfficiency: efficiencyArray[efficiencyArray.length - 1] || 0,
+        columnA: finalColumnA,
+        columnB: finalColumnB
+    };
+}
+
+function getColumnStatus(timeInCycle, config) {
+    const totalDuration = config.adsorptionTime + config.regenerationTime + config.cooldownTime;
+    const normalizedTime = totalDuration > 0 ? timeInCycle % totalDuration : 0;
+
+    if (normalizedTime < config.adsorptionTime) {
+        return {
+            state: 'Adsorption',
+            tone: 'primary',
+            note: 'Actively removing impurities from the feed stream.',
+            progress: (normalizedTime / config.adsorptionTime) * 100,
+            temperature: config.baseTemperature
+        };
+    }
+
+    if (normalizedTime < config.adsorptionTime + config.regenerationTime) {
+        const elapsed = normalizedTime - config.adsorptionTime;
+        const progress = config.regenerationTime > 0 ? (elapsed / config.regenerationTime) * 100 : 0;
+        return {
+            state: 'Regeneration',
+            tone: 'warning',
+            note: 'Heater loop is restoring adsorption capacity.',
+            progress: progress,
+            temperature: config.baseTemperature + (200 - config.baseTemperature) * (progress / 100)
+        };
+    }
+
+    if (normalizedTime < config.adsorptionTime + config.regenerationTime + config.cooldownTime) {
+        const elapsed = normalizedTime - config.adsorptionTime - config.regenerationTime;
+        const progress = config.cooldownTime > 0 ? (elapsed / config.cooldownTime) * 100 : 0;
+        return {
+            state: 'Cooling',
+            tone: 'info',
+            note: 'Column is cooling before it returns to service.',
+            progress: progress,
+            temperature: 200 - (200 - config.baseTemperature) * (progress / 100)
+        };
+    }
+
+    return {
+        state: 'Standby',
+        tone: 'secondary',
+        note: 'Waiting for the next active purification duty.',
+        progress: 0,
+        temperature: config.baseTemperature
+    };
+}
+
+function updateKpis(values) {
+    document.getElementById('cycleDurationKpi').textContent = formatNumber(values.duration) + ' h';
+    document.getElementById('adsorptionTimeKpi').textContent = formatNumber(values.adsorptionTime) + ' h';
+    document.getElementById('regenerationTimeKpi').textContent = formatNumber(values.regenerationTime) + ' h';
+    document.getElementById('cooldownTimeKpi').textContent = formatNumber(values.cooldownTime) + ' h';
+    document.getElementById('finalPurityKpi').textContent = formatNumber(values.finalPurity) + '%';
+    document.getElementById('finalEfficiencyKpi').textContent = formatNumber(values.finalEfficiency) + '%';
+}
+
+function updateColumnPanels(columnA, columnB) {
+    const activeColumn = chooseActiveColumn(columnA, columnB);
+    updateSingleColumnPanel('A', columnA, activeColumn === 'A');
+    updateSingleColumnPanel('B', columnB, activeColumn === 'B');
+}
+
+function updateSingleColumnPanel(label, column, isActive) {
+    const badge = document.getElementById('column' + label + 'Badge');
+    const note = document.getElementById('column' + label + 'Note');
+    const progressValue = document.getElementById('column' + label + 'ProgressValue');
+    const temperature = document.getElementById('column' + label + 'Temperature');
+    const statusCard = document.getElementById('column' + label + 'StatusCard');
+
+    badge.textContent = column.state;
+    badge.className = 'badge simulation-state-badge text-bg-' + column.tone;
+    note.textContent = column.note;
+    progressValue.textContent = formatNumber(column.progress) + '%';
+    temperature.textContent = formatNumber(column.temperature) + ' C';
+
+    statusCard.classList.toggle('active-column', isActive);
+}
+
+function updateProcessFlow(columnA, columnB) {
+    const activeColumn = chooseActiveColumn(columnA, columnB);
+    updateSingleProcessColumn('A', columnA, activeColumn === 'A');
+    updateSingleProcessColumn('B', columnB, activeColumn === 'B');
+}
+
+function updateSingleProcessColumn(label, column, isActive) {
+    const node = document.getElementById('processColumn' + label);
+    const badge = document.getElementById('processColumn' + label + 'Badge');
+    const description = document.getElementById('processColumn' + label + 'Description');
+    const progressBar = document.getElementById('processColumn' + label + 'Progress');
+
+    badge.textContent = column.state;
+    badge.className = 'badge simulation-state-badge text-bg-' + column.tone;
+    description.textContent = column.note;
+    progressBar.style.width = Math.max(0, Math.min(100, column.progress)) + '%';
+    progressBar.className = 'progress-bar bg-' + column.tone;
+    node.classList.toggle('active-node', isActive);
+}
+
+function chooseActiveColumn(columnA, columnB) {
+    if (columnA.state === 'Adsorption') {
+        return 'A';
+    }
+    if (columnB.state === 'Adsorption') {
+        return 'B';
+    }
+    return columnA.progress >= columnB.progress ? 'A' : 'B';
+}
+
+function renderPurityChart(preview) {
+    Plotly.newPlot('previewPurityChart', [{
+        x: preview.timeArray,
+        y: preview.purityArray,
+        type: 'scatter',
+        mode: 'lines',
+        name: 'Purity',
+        line: { color: '#0d6efd', width: 3 },
+        fill: 'tozeroy',
+        fillcolor: 'rgba(13, 110, 253, 0.12)',
+        hovertemplate: '<b>Time:</b> %{x:.2f} h<br><b>Purity:</b> %{y:.2f}%<extra></extra>'
+    }], {
+        margin: { t: 20, r: 10, b: 45, l: 55 },
+        paper_bgcolor: 'rgba(0,0,0,0)',
+        plot_bgcolor: '#f8fbff',
+        xaxis: { title: 'Time (hours)' },
+        yaxis: { title: 'Purity (%)', range: [0, 105], gridcolor: '#e3edf8' }
+    }, {
+        responsive: true,
+        displayModeBar: false
+    });
+}
+
+function renderEfficiencyChart(preview) {
+    Plotly.newPlot('previewEfficiencyChart', [{
+        x: preview.timeArray,
+        y: preview.efficiencyArray,
+        type: 'scatter',
+        mode: 'lines',
+        name: 'Efficiency',
+        line: { color: '#0b5ed7', width: 3 },
+        fill: 'tozeroy',
+        fillcolor: 'rgba(11, 94, 215, 0.12)',
+        hovertemplate: '<b>Time:</b> %{x:.2f} h<br><b>Efficiency:</b> %{y:.2f}%<extra></extra>'
+    }], {
+        margin: { t: 20, r: 10, b: 45, l: 55 },
+        paper_bgcolor: 'rgba(0,0,0,0)',
+        plot_bgcolor: '#f8fbff',
+        xaxis: { title: 'Time (hours)' },
+        yaxis: { title: 'Efficiency (%)', range: [0, 105], gridcolor: '#e3edf8' }
+    }, {
+        responsive: true,
+        displayModeBar: false
+    });
+}
+
+function renderTemperatureChart(preview) {
+    Plotly.newPlot('previewTemperatureChart', [
+        {
+            x: preview.timeArray,
+            y: preview.temperatureArrayA,
+            type: 'scatter',
+            mode: 'lines',
+            name: 'Column A',
+            line: { color: '#0d6efd', width: 3 },
+            hovertemplate: '<b>Column A</b><br>Time: %{x:.2f} h<br>Temperature: %{y:.2f} C<extra></extra>'
+        },
+        {
+            x: preview.timeArray,
+            y: preview.temperatureArrayB,
+            type: 'scatter',
+            mode: 'lines',
+            name: 'Column B',
+            line: { color: '#6ea8fe', width: 3 },
+            hovertemplate: '<b>Column B</b><br>Time: %{x:.2f} h<br>Temperature: %{y:.2f} C<extra></extra>'
+        }
+    ], {
+        margin: { t: 20, r: 10, b: 45, l: 55 },
+        paper_bgcolor: 'rgba(0,0,0,0)',
+        plot_bgcolor: '#f8fbff',
+        xaxis: { title: 'Time (hours)' },
+        yaxis: { title: 'Temperature (C)', range: [0, 220], gridcolor: '#e3edf8' },
+        legend: { orientation: 'h', y: 1.12 }
+    }, {
+        responsive: true,
+        displayModeBar: false
+    });
+}
+
+function formatNumber(value) {
+    const numericValue = Number(value);
+    return Number.isFinite(numericValue) ? numericValue.toFixed(2) : '-';
+}
+
+window.addEventListener('resize', function() {
+    ['previewPurityChart', 'previewEfficiencyChart', 'previewTemperatureChart'].forEach(function(chartId) {
+        const chartElement = document.getElementById(chartId);
+        if (chartElement) {
+            Plotly.Plots.resize(chartElement);
+        }
+    });
+});
+</script>
+{% endblock %}

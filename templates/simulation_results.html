@@ -1,0 +1,321 @@
+{% extends "base.html" %}
+
+{% block title %}Simulation Results | Gas Purification Simulator{% endblock %}
+
+{% block content %}
+{% if simulation_results and simulation_results != 'null' %}
+<section class="page-hero mb-4">
+    <div class="row align-items-center g-4">
+        <div class="col-lg-8">
+            <div class="section-label">
+                <i class="fa-solid fa-chart-line"></i>
+                Simulation Results
+            </div>
+            <h1 class="display-5 fw-bold mb-3">Process performance dashboard</h1>
+            <p id="summaryText" class="lead text-secondary mb-0">-</p>
+        </div>
+        <div class="col-lg-4">
+            <div class="row g-3">
+                <div class="col-6">
+                    <div class="app-card text-center h-100">
+                        <p class="text-secondary text-uppercase small mb-2">Target Purity</p>
+                        <div id="targetPurity" class="metric-value h3 mb-0">-</div>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="app-card text-center h-100">
+                        <p class="text-secondary text-uppercase small mb-2">Final Purity</p>
+                        <div id="finalPurity" class="metric-value h3 mb-0">-</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="mb-4">
+    <div class="row g-4">
+        <div class="col-md-6 col-xl-3">
+            <div class="app-card h-100">
+                <p class="text-secondary text-uppercase small mb-2">Time to Target</p>
+                <div id="timeToTarget" class="metric-value h3 mb-2">-</div>
+                <p class="metric-caption mb-0">hours</p>
+            </div>
+        </div>
+        <div class="col-md-6 col-xl-3">
+            <div class="app-card h-100">
+                <p class="text-secondary text-uppercase small mb-2">Purity Gain</p>
+                <div id="purityGain" class="metric-value h3 mb-2">-</div>
+                <p class="metric-caption mb-0">percentage points</p>
+            </div>
+        </div>
+        <div class="col-md-6 col-xl-3">
+            <div class="app-card h-100">
+                <p class="text-secondary text-uppercase small mb-2">Initial Efficiency</p>
+                <div id="initialEfficiency" class="metric-value h3 mb-2">-</div>
+                <p class="metric-caption mb-0">percent</p>
+            </div>
+        </div>
+        <div class="col-md-6 col-xl-3">
+            <div class="app-card h-100">
+                <p class="text-secondary text-uppercase small mb-2">Max Duration</p>
+                <div id="maxTime" class="metric-value h3 mb-2">-</div>
+                <p class="metric-caption mb-0">hours</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="mb-4">
+    <div class="row g-4">
+        <div class="col-lg-6">
+            <div class="app-card chart-card h-100">
+                <div class="app-card-header">
+                    <div class="d-flex align-items-center gap-3">
+                        <div class="icon-tile">
+                            <i class="fa-solid fa-chart-line"></i>
+                        </div>
+                        <div>
+                            <h2 class="app-card-title">Purity vs Time</h2>
+                            <p class="text-secondary mb-0">Evolution of achieved purity during operation.</p>
+                        </div>
+                    </div>
+                </div>
+                <div id="purityChart" class="chart-frame"></div>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="app-card chart-card h-100">
+                <div class="app-card-header">
+                    <div class="d-flex align-items-center gap-3">
+                        <div class="icon-tile">
+                            <i class="fa-solid fa-bolt"></i>
+                        </div>
+                        <div>
+                            <h2 class="app-card-title">Efficiency vs Time</h2>
+                            <p class="text-secondary mb-0">System efficiency throughout the simulation.</p>
+                        </div>
+                    </div>
+                </div>
+                <div id="efficiencyChart" class="chart-frame"></div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="mb-4">
+    <div class="row g-4">
+        <div class="col-lg-6">
+            <div class="app-card h-100">
+                <div class="app-card-header">
+                    <div class="d-flex align-items-center gap-3">
+                        <div class="icon-tile">
+                            <i class="fa-solid fa-list-check"></i>
+                        </div>
+                        <div>
+                            <h2 class="app-card-title">Simulation Details</h2>
+                            <p class="text-secondary mb-0">Core values extracted from the run.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="row g-3">
+                    <div class="col-sm-6">
+                        <div class="border rounded-4 p-3 bg-light h-100">
+                            <p class="text-secondary text-uppercase small mb-1">Initial Purity</p>
+                            <div id="initPurity" class="fw-bold">-</div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="border rounded-4 p-3 bg-light h-100">
+                            <p class="text-secondary text-uppercase small mb-1">Target Purity</p>
+                            <div id="targetPurityDetail" class="fw-bold">-</div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="border rounded-4 p-3 bg-light h-100">
+                            <p class="text-secondary text-uppercase small mb-1">Final Purity</p>
+                            <div id="finalPurityDetail" class="fw-bold">-</div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="border rounded-4 p-3 bg-light h-100">
+                            <p class="text-secondary text-uppercase small mb-1">Target Reached</p>
+                            <div id="targetReached" class="fw-bold">-</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="app-card h-100">
+                <div class="app-card-header">
+                    <div class="d-flex align-items-center gap-3">
+                        <div class="icon-tile">
+                            <i class="fa-solid fa-code"></i>
+                        </div>
+                        <div>
+                            <h2 class="app-card-title">Raw Data</h2>
+                            <p class="text-secondary mb-0">Expanded JSON output from the simulation.</p>
+                        </div>
+                    </div>
+                </div>
+                <pre id="jsonData" class="mb-0 p-3 rounded-4 bg-light border" style="max-height: 320px; overflow: auto;">Loading...</pre>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="app-card">
+    <div class="d-flex gap-3 flex-wrap justify-content-center">
+        <a href="{{ url_for('simulation') }}" class="btn btn-primary">
+            <i class="fa-solid fa-arrow-rotate-right me-2"></i>Run Another Simulation
+        </a>
+        <a href="{{ url_for('input_page') }}" class="btn btn-outline-primary">
+            <i class="fa-solid fa-pen-to-square me-2"></i>New Analysis
+        </a>
+        <a href="{{ url_for('home') }}" class="btn btn-outline-secondary">
+            <i class="fa-solid fa-house me-2"></i>Home
+        </a>
+    </div>
+</section>
+{% else %}
+<section class="page-hero text-center">
+    <div class="section-label justify-content-center">
+        <i class="fa-solid fa-circle-exclamation"></i>
+        No Simulation Data
+    </div>
+    <h1 class="display-6 fw-bold mb-3">Run a simulation to view charts and metrics</h1>
+    <p class="lead text-secondary mx-auto mb-4" style="max-width: 720px;">
+        Once a simulation is completed, purity, efficiency and summary metrics will appear here.
+    </p>
+    <a href="{{ url_for('simulation') }}" class="btn btn-primary btn-lg">
+        <i class="fa-solid fa-play me-2"></i>Go to Simulation
+    </a>
+</section>
+{% endif %}
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const simulationResultsStr = '{{ simulation_results | safe }}';
+
+    if (!simulationResultsStr || simulationResultsStr === 'null') {
+        return;
+    }
+
+    try {
+        const results = JSON.parse(simulationResultsStr);
+        displaySummary(results);
+        displayMetrics(results);
+        displayPurityChart(results);
+        displayEfficiencyChart(results);
+        document.getElementById('jsonData').textContent = JSON.stringify(results, null, 2);
+    } catch (error) {
+        console.error('Error parsing simulation results:', error);
+    }
+});
+
+function displaySummary(results) {
+    document.getElementById('summaryText').textContent = results.summary || '-';
+    document.getElementById('targetPurity').textContent = formatNumber(results.target_purity) + '%';
+    document.getElementById('finalPurity').textContent = formatNumber(results.final_purity) + '%';
+}
+
+function displayMetrics(results) {
+    const targetReached = Number(results.final_purity) >= Number(results.target_purity);
+
+    document.getElementById('timeToTarget').textContent = formatNumber(results.time_to_target);
+    document.getElementById('purityGain').textContent = formatNumber(Number(results.final_purity) - Number(results.initial_purity));
+    document.getElementById('initialEfficiency').textContent = '100.00';
+    document.getElementById('maxTime').textContent = formatNumber(results.max_time);
+    document.getElementById('initPurity').textContent = formatNumber(results.initial_purity) + '%';
+    document.getElementById('targetPurityDetail').textContent = formatNumber(results.target_purity) + '%';
+    document.getElementById('finalPurityDetail').textContent = formatNumber(results.final_purity) + '%';
+    document.getElementById('targetReached').innerHTML = targetReached
+        ? '<span class="soft-badge text-success bg-success-subtle"><i class="fa-solid fa-circle-check"></i>Yes</span>'
+        : '<span class="soft-badge text-danger bg-danger-subtle"><i class="fa-solid fa-circle-xmark"></i>No</span>';
+}
+
+function displayPurityChart(results) {
+    const timeArray = results.time_array || [];
+    const purityArray = results.purity_evolution || [];
+    const targetPurity = Number(results.target_purity || 0);
+
+    Plotly.newPlot('purityChart', [
+        {
+            x: timeArray,
+            y: purityArray,
+            type: 'scatter',
+            mode: 'lines',
+            name: 'Achieved Purity',
+            line: { color: '#0d6efd', width: 3 },
+            fill: 'tozeroy',
+            fillcolor: 'rgba(13, 110, 253, 0.12)',
+            hovertemplate: '<b>Time:</b> %{x:.2f} h<br><b>Purity:</b> %{y:.2f}%<extra></extra>'
+        },
+        {
+            x: [timeArray[0], timeArray[timeArray.length - 1]],
+            y: [targetPurity, targetPurity],
+            type: 'scatter',
+            mode: 'lines',
+            name: 'Target Purity',
+            line: { color: '#6c757d', width: 2, dash: 'dash' },
+            hovertemplate: '<b>Target:</b> %{y:.2f}%<extra></extra>'
+        }
+    ], {
+        margin: { t: 20, r: 10, b: 45, l: 50 },
+        paper_bgcolor: 'rgba(0,0,0,0)',
+        plot_bgcolor: '#f8fbff',
+        xaxis: { title: 'Time (hours)' },
+        yaxis: { title: 'Purity (%)', range: [0, 105], gridcolor: '#e3edf8' },
+        legend: { orientation: 'h', y: 1.12 }
+    }, {
+        responsive: true,
+        displayModeBar: false
+    });
+}
+
+function displayEfficiencyChart(results) {
+    Plotly.newPlot('efficiencyChart', [{
+        x: results.time_array || [],
+        y: results.efficiency_evolution || [],
+        type: 'scatter',
+        mode: 'lines',
+        name: 'Efficiency',
+        line: { color: '#0b5ed7', width: 3 },
+        fill: 'tozeroy',
+        fillcolor: 'rgba(11, 94, 215, 0.12)',
+        hovertemplate: '<b>Time:</b> %{x:.2f} h<br><b>Efficiency:</b> %{y:.2f}%<extra></extra>'
+    }], {
+        margin: { t: 20, r: 10, b: 45, l: 50 },
+        paper_bgcolor: 'rgba(0,0,0,0)',
+        plot_bgcolor: '#f8fbff',
+        xaxis: { title: 'Time (hours)' },
+        yaxis: { title: 'Efficiency (%)', range: [0, 110], gridcolor: '#e3edf8' }
+    }, {
+        responsive: true,
+        displayModeBar: false
+    });
+}
+
+function formatNumber(value) {
+    const numericValue = Number(value);
+    return Number.isFinite(numericValue) ? numericValue.toFixed(2) : '-';
+}
+
+window.addEventListener('resize', function() {
+    const purityChart = document.getElementById('purityChart');
+    const efficiencyChart = document.getElementById('efficiencyChart');
+
+    if (purityChart) {
+        Plotly.Plots.resize(purityChart);
+    }
+
+    if (efficiencyChart) {
+        Plotly.Plots.resize(efficiencyChart);
+    }
+});
+</script>
+{% endblock %}

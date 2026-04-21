@@ -1,0 +1,546 @@
+{% extends "base.html" %}
+
+{% block title %}Case Study | Gas Purification Simulator{% endblock %}
+
+{% block content %}
+{% if case_study_dashboard %}
+<section class="page-hero mb-4">
+    <div class="row align-items-center g-4">
+        <div class="col-lg-8">
+            <div class="section-label">
+                <i class="fa-solid fa-industry"></i>
+                H2/CO Case Study
+            </div>
+            <h1 class="display-5 fw-bold mb-3">Temperature Swing Adsorption Dashboard</h1>
+            <p class="lead text-secondary mb-0">{{ case_study_dashboard.summary }}</p>
+        </div>
+        <div class="col-lg-4">
+            <div class="app-card h-100 bg-primary text-white border-0">
+                <p class="text-uppercase small opacity-75 mb-2">Scenario</p>
+                <h2 class="h4 fw-bold mb-2">Dual-column TSA system</h2>
+                <p class="mb-3 opacity-75">A ready-to-review industrial purification cycle with alternating adsorption and regeneration.</p>
+                <div class="d-flex flex-wrap gap-2">
+                    <span class="badge rounded-pill text-bg-light text-primary px-3 py-2">Adsorption</span>
+                    <span class="badge rounded-pill text-bg-light text-primary px-3 py-2">Regeneration</span>
+                    <span class="badge rounded-pill text-bg-light text-primary px-3 py-2">Cooling</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="mb-4">
+    <div class="row g-4">
+        {% for card in case_study_dashboard.summary_cards %}
+        <div class="col-sm-6 col-xl-3">
+            <div class="app-card h-100 text-center">
+                <p class="text-secondary text-uppercase small mb-2">{{ card.label }}</p>
+                <div class="metric-value h3 mb-0">{{ card.value }}</div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</section>
+
+<section class="mb-4">
+    <div class="app-card">
+        <div class="app-card-header">
+            <div class="d-flex align-items-center gap-3">
+                <div class="icon-tile">
+                    <i class="fa-solid fa-diagram-project"></i>
+                </div>
+                <div>
+                    <h2 class="app-card-title">Two-Column TSA Flow</h2>
+                    <p class="text-secondary mb-0">Visual overview of the feed path, active columns, purified gas outlet and regeneration heater loop.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="row g-3 align-items-stretch mb-3">
+            <div class="col-lg-2">
+                <div class="card border-0 shadow-sm rounded-4 h-100 bg-light">
+                    <div class="card-body text-center d-flex flex-column justify-content-center">
+                        <div class="mb-3 text-primary fs-3">
+                            <i class="fa-solid fa-arrow-right-to-bracket"></i>
+                        </div>
+                        <p class="text-secondary text-uppercase small mb-1">Inlet</p>
+                        <h3 class="h5 fw-bold mb-2">Feed Gas</h3>
+                        <span class="badge text-bg-primary-subtle text-primary rounded-pill px-3 py-2">H2 / CO / CO2 Mixture</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-1">
+                <div class="card border-0 shadow-sm rounded-4 h-100 bg-white">
+                    <div class="card-body text-center d-flex align-items-center justify-content-center">
+                        <span class="badge text-bg-primary rounded-pill px-3 py-2">
+                            <i class="fa-solid fa-arrow-right"></i>
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-6">
+                <div class="row g-3 h-100">
+                    {% for panel in case_study_dashboard.status_panels %}
+                    <div class="col-md-6">
+                        <div class="card border-0 shadow-sm rounded-4 h-100">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between align-items-start gap-3 mb-3">
+                                    <div>
+                                        <p class="text-secondary text-uppercase small mb-1">{{ panel.label }}</p>
+                                        <h3 class="h5 fw-bold mb-0">Adsorption Column</h3>
+                                    </div>
+                                    <span class="badge text-bg-{{ panel.tone }} rounded-pill px-3 py-2">{{ panel.state }}</span>
+                                </div>
+
+                                <p class="text-secondary small mb-3">{{ panel.note }}</p>
+
+                                <div class="row g-2 mb-3">
+                                    <div class="col-6">
+                                        <div class="rounded-4 bg-light border p-2 h-100">
+                                            <p class="text-secondary text-uppercase small mb-1">Temperature</p>
+                                            <div class="fw-semibold">
+                                                {% if panel.last_temperature is not none %}
+                                                {{ '%.1f'|format(panel.last_temperature) }} &deg;C
+                                                {% else %}
+                                                -
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <div class="rounded-4 bg-light border p-2 h-100">
+                                            <p class="text-secondary text-uppercase small mb-1">Purity</p>
+                                            <div class="fw-semibold">
+                                                {% if panel.last_purity is not none %}
+                                                {{ '%.1f'|format(panel.last_purity) }}%
+                                                {% else %}
+                                                -
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                    <span class="text-secondary text-uppercase small">Phase progress</span>
+                                    <span class="fw-semibold">{{ '%.1f'|format(panel.progress) }}%</span>
+                                </div>
+                                <div class="progress" style="height: 8px;">
+                                    <div class="progress-bar bg-{{ panel.tone }}" role="progressbar" style="width: {{ panel.progress }}%;" aria-valuenow="{{ panel.progress }}" aria-valuemin="0" aria-valuemax="100"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <div class="col-lg-1">
+                <div class="card border-0 shadow-sm rounded-4 h-100 bg-white">
+                    <div class="card-body text-center d-flex align-items-center justify-content-center">
+                        <span class="badge text-bg-success rounded-pill px-3 py-2">
+                            <i class="fa-solid fa-arrow-right"></i>
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-2">
+                <div class="card border-0 shadow-sm rounded-4 h-100 bg-light">
+                    <div class="card-body text-center d-flex flex-column justify-content-center">
+                        <div class="mb-3 text-success fs-3">
+                            <i class="fa-solid fa-arrow-right-from-bracket"></i>
+                        </div>
+                        <p class="text-secondary text-uppercase small mb-1">Outlet</p>
+                        <h3 class="h5 fw-bold mb-2">Purified Gas</h3>
+                        <span class="badge text-bg-success-subtle text-success rounded-pill px-3 py-2">Continuous Product Stream</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row g-3 justify-content-center">
+            <div class="col-lg-8">
+                <div class="card border-0 shadow-sm rounded-4 bg-light">
+                    <div class="card-body">
+                        <div class="row g-3 align-items-center">
+                            <div class="col-md-4 text-center">
+                                <span class="badge text-bg-warning rounded-pill px-3 py-2 mb-2">Regeneration Loop</span>
+                                <h3 class="h6 fw-bold mb-1">Spent Bed Outlet</h3>
+                                <p class="text-secondary small mb-0">Desorbed impurities leave the active regeneration path.</p>
+                            </div>
+                            <div class="col-md-4 text-center">
+                                <div class="card border-0 shadow-sm rounded-4 h-100">
+                                    <div class="card-body py-3">
+                                        <div class="text-warning fs-3 mb-2">
+                                            <i class="fa-solid fa-fire-flame-curved"></i>
+                                        </div>
+                                        <h3 class="h6 fw-bold mb-1">Heater</h3>
+                                        <p class="text-secondary small mb-0">Raises temperature to restore adsorption capacity.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4 text-center">
+                                <span class="badge text-bg-info rounded-pill px-3 py-2 mb-2">Return Loop</span>
+                                <h3 class="h6 fw-bold mb-1">Reconditioned Column</h3>
+                                <p class="text-secondary small mb-0">Column re-enters the cycle ready for the next adsorption phase.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="mb-4">
+    <div class="row g-4">
+        {% for panel in case_study_dashboard.status_panels %}
+        <div class="col-lg-6">
+            <div class="app-card h-100">
+                <div class="app-card-header">
+                    <div class="d-flex align-items-center gap-3">
+                        <div class="icon-tile">
+                            <i class="fa-solid fa-columns"></i>
+                        </div>
+                        <div>
+                            <h2 class="app-card-title">{{ panel.label }} Status</h2>
+                            <p class="text-secondary mb-0">{{ panel.note }}</p>
+                        </div>
+                    </div>
+                    <span class="badge rounded-pill text-bg-{{ panel.tone }} px-3 py-2">{{ panel.state }}</span>
+                </div>
+
+                <div class="mb-3">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <span class="text-secondary small text-uppercase">Phase progress</span>
+                        <span class="fw-semibold">{{ '%.1f'|format(panel.progress) }}%</span>
+                    </div>
+                    <div class="progress" style="height: 10px;">
+                        <div class="progress-bar bg-{{ panel.tone }}" role="progressbar" style="width: {{ panel.progress }}%;" aria-valuenow="{{ panel.progress }}" aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                </div>
+
+                <div class="row g-3">
+                    <div class="col-sm-6">
+                        <div class="border rounded-4 p-3 bg-light h-100">
+                            <p class="text-secondary text-uppercase small mb-1">Latest Temperature</p>
+                            <div class="fw-bold">
+                                {% if panel.last_temperature is not none %}
+                                {{ '%.1f'|format(panel.last_temperature) }} &deg;C
+                                {% else %}
+                                -
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="border rounded-4 p-3 bg-light h-100">
+                            <p class="text-secondary text-uppercase small mb-1">Latest Purity</p>
+                            <div class="fw-bold">
+                                {% if panel.last_purity is not none %}
+                                {{ '%.1f'|format(panel.last_purity) }}%
+                                {% else %}
+                                -
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</section>
+
+<section class="mb-4">
+    <div class="app-card chart-card">
+        <div class="app-card-header">
+            <div class="d-flex align-items-center gap-3">
+                <div class="icon-tile">
+                    <i class="fa-solid fa-bars-progress"></i>
+                </div>
+                <div>
+                    <h2 class="app-card-title">Column Status Timeline</h2>
+                    <p class="text-secondary mb-0">Operating state changes across the full simulated cycle history.</p>
+                </div>
+            </div>
+        </div>
+        <div id="statusTimelineChart" class="chart-frame"></div>
+    </div>
+</section>
+
+<section class="mb-4">
+    <div class="row g-4">
+        <div class="col-lg-6">
+            <div class="app-card chart-card h-100">
+                <div class="app-card-header">
+                    <div class="d-flex align-items-center gap-3">
+                        <div class="icon-tile">
+                            <i class="fa-solid fa-temperature-three-quarters"></i>
+                        </div>
+                        <div>
+                            <h2 class="app-card-title">Temperature vs Time</h2>
+                            <p class="text-secondary mb-0">Column temperature profiles throughout the TSA cycle.</p>
+                        </div>
+                    </div>
+                </div>
+                <div id="temperatureChart" class="chart-frame"></div>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="app-card chart-card h-100">
+                <div class="app-card-header">
+                    <div class="d-flex align-items-center gap-3">
+                        <div class="icon-tile">
+                            <i class="fa-solid fa-droplet"></i>
+                        </div>
+                        <div>
+                            <h2 class="app-card-title">Purity vs Time</h2>
+                            <p class="text-secondary mb-0">Column purity response during adsorption and regeneration.</p>
+                        </div>
+                    </div>
+                </div>
+                <div id="purityChart" class="chart-frame"></div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="mb-4">
+    <div class="app-card chart-card">
+        <div class="app-card-header">
+            <div class="d-flex align-items-center gap-3">
+                <div class="icon-tile">
+                    <i class="fa-solid fa-gauge-high"></i>
+                </div>
+                <div>
+                    <h2 class="app-card-title">Efficiency vs Time</h2>
+                    <p class="text-secondary mb-0">Overall removal efficiency with per-column reference curves.</p>
+                </div>
+            </div>
+        </div>
+        <div id="efficiencyChart" class="chart-frame"></div>
+    </div>
+</section>
+
+<section class="app-card">
+    <div class="d-flex gap-3 flex-wrap justify-content-center">
+        <a href="{{ url_for('simulation') }}" class="btn btn-primary">
+            <i class="fa-solid fa-arrow-rotate-right me-2"></i>Run Another Simulation
+        </a>
+        <a href="{{ url_for('input_page') }}" class="btn btn-outline-primary">
+            <i class="fa-solid fa-pen-to-square me-2"></i>Custom Analysis
+        </a>
+        <a href="{{ url_for('home') }}" class="btn btn-outline-secondary">
+            <i class="fa-solid fa-house me-2"></i>Home
+        </a>
+    </div>
+</section>
+{% else %}
+<section class="page-hero text-center">
+    <div class="section-label justify-content-center">
+        <i class="fa-solid fa-circle-exclamation"></i>
+        No Case Study Data
+    </div>
+    <h1 class="display-6 fw-bold mb-3">Load the case study to review the TSA dashboard</h1>
+    <p class="lead text-secondary mx-auto mb-4" style="max-width: 720px;">
+        The case-study dashboard appears here after the predefined simulation is launched.
+    </p>
+    <a href="{{ url_for('simulation') }}" class="btn btn-primary btn-lg">
+        <i class="fa-solid fa-wave-square me-2"></i>Go to Simulation
+    </a>
+</section>
+{% endif %}
+{% endblock %}
+
+{% block extra_js %}
+{% if case_study_chart_data %}
+<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const chartData = {{ case_study_chart_data | tojson }};
+    renderStatusTimelineChart(chartData);
+    renderTemperatureChart(chartData);
+    renderPurityChart(chartData);
+    renderEfficiencyChart(chartData);
+});
+
+function renderStatusTimelineChart(chartData) {
+    const stateMap = {
+        'Adsorption': 1,
+        'Regeneration': 2,
+        'Cooling': 3,
+        'Standby': 4
+    };
+
+    Plotly.newPlot('statusTimelineChart', [
+        {
+            x: chartData.time_array || [],
+            y: (chartData.status_history.column_a || []).map(function(state) {
+                return stateMap[state] || 4;
+            }),
+            customdata: chartData.status_history.column_a || [],
+            type: 'scatter',
+            mode: 'lines',
+            name: 'Column A',
+            line: { color: '#0d6efd', width: 3 },
+            hovertemplate: '<b>Column A</b><br>Time: %{x:.1f} h<br>State: %{customdata}<extra></extra>'
+        },
+        {
+            x: chartData.time_array || [],
+            y: (chartData.status_history.column_b || []).map(function(state) {
+                return stateMap[state] || 4;
+            }),
+            customdata: chartData.status_history.column_b || [],
+            type: 'scatter',
+            mode: 'lines',
+            name: 'Column B',
+            line: { color: '#6ea8fe', width: 3 },
+            hovertemplate: '<b>Column B</b><br>Time: %{x:.1f} h<br>State: %{customdata}<extra></extra>'
+        }
+    ], {
+        margin: { t: 20, r: 10, b: 45, l: 60 },
+        paper_bgcolor: 'rgba(0,0,0,0)',
+        plot_bgcolor: '#f8fbff',
+        xaxis: { title: 'Time (hours)' },
+        yaxis: {
+            title: 'Column State',
+            tickvals: [1, 2, 3, 4],
+            ticktext: ['Adsorption', 'Regeneration', 'Cooling', 'Standby'],
+            gridcolor: '#e3edf8'
+        },
+        legend: { orientation: 'h', y: 1.12 }
+    }, {
+        responsive: true,
+        displayModeBar: false
+    });
+}
+
+function renderTemperatureChart(chartData) {
+    Plotly.newPlot('temperatureChart', [
+        {
+            x: chartData.time_array || [],
+            y: chartData.temperature.column_a || [],
+            type: 'scatter',
+            mode: 'lines',
+            name: 'Column A',
+            line: { color: '#0d6efd', width: 3 },
+            hovertemplate: '<b>Column A</b><br>Time: %{x:.1f} h<br>Temperature: %{y:.1f} C<extra></extra>'
+        },
+        {
+            x: chartData.time_array || [],
+            y: chartData.temperature.column_b || [],
+            type: 'scatter',
+            mode: 'lines',
+            name: 'Column B',
+            line: { color: '#6ea8fe', width: 3 },
+            hovertemplate: '<b>Column B</b><br>Time: %{x:.1f} h<br>Temperature: %{y:.1f} C<extra></extra>'
+        }
+    ], {
+        margin: { t: 20, r: 10, b: 45, l: 55 },
+        paper_bgcolor: 'rgba(0,0,0,0)',
+        plot_bgcolor: '#f8fbff',
+        xaxis: { title: 'Time (hours)' },
+        yaxis: { title: 'Temperature (C)', range: [0, 220], gridcolor: '#e3edf8' },
+        legend: { orientation: 'h', y: 1.12 }
+    }, {
+        responsive: true,
+        displayModeBar: false
+    });
+}
+
+function renderPurityChart(chartData) {
+    Plotly.newPlot('purityChart', [
+        {
+            x: chartData.time_array || [],
+            y: chartData.purity.column_a || [],
+            type: 'scatter',
+            mode: 'lines',
+            name: 'Column A',
+            line: { color: '#0d6efd', width: 3 },
+            fill: 'tozeroy',
+            fillcolor: 'rgba(13, 110, 253, 0.10)',
+            hovertemplate: '<b>Column A</b><br>Time: %{x:.1f} h<br>Purity: %{y:.1f}%<extra></extra>'
+        },
+        {
+            x: chartData.time_array || [],
+            y: chartData.purity.column_b || [],
+            type: 'scatter',
+            mode: 'lines',
+            name: 'Column B',
+            line: { color: '#6ea8fe', width: 3 },
+            fill: 'tozeroy',
+            fillcolor: 'rgba(110, 168, 254, 0.10)',
+            hovertemplate: '<b>Column B</b><br>Time: %{x:.1f} h<br>Purity: %{y:.1f}%<extra></extra>'
+        }
+    ], {
+        margin: { t: 20, r: 10, b: 45, l: 55 },
+        paper_bgcolor: 'rgba(0,0,0,0)',
+        plot_bgcolor: '#f8fbff',
+        xaxis: { title: 'Time (hours)' },
+        yaxis: { title: 'Purity (%)', range: [0, 105], gridcolor: '#e3edf8' },
+        legend: { orientation: 'h', y: 1.12 }
+    }, {
+        responsive: true,
+        displayModeBar: false
+    });
+}
+
+function renderEfficiencyChart(chartData) {
+    Plotly.newPlot('efficiencyChart', [
+        {
+            x: chartData.time_array || [],
+            y: chartData.efficiency.overall || [],
+            type: 'scatter',
+            mode: 'lines',
+            name: 'Overall Efficiency',
+            line: { color: '#0d6efd', width: 4 },
+            fill: 'tozeroy',
+            fillcolor: 'rgba(13, 110, 253, 0.12)',
+            hovertemplate: '<b>Overall</b><br>Time: %{x:.1f} h<br>Efficiency: %{y:.1f}%<extra></extra>'
+        },
+        {
+            x: chartData.time_array || [],
+            y: chartData.efficiency.column_a || [],
+            type: 'scatter',
+            mode: 'lines',
+            name: 'Column A Reference',
+            line: { color: '#7aa7ff', width: 2, dash: 'dot' },
+            hovertemplate: '<b>Column A</b><br>Time: %{x:.1f} h<br>Efficiency: %{y:.1f}%<extra></extra>'
+        },
+        {
+            x: chartData.time_array || [],
+            y: chartData.efficiency.column_b || [],
+            type: 'scatter',
+            mode: 'lines',
+            name: 'Column B Reference',
+            line: { color: '#9bbcff', width: 2, dash: 'dot' },
+            hovertemplate: '<b>Column B</b><br>Time: %{x:.1f} h<br>Efficiency: %{y:.1f}%<extra></extra>'
+        }
+    ], {
+        margin: { t: 20, r: 10, b: 45, l: 55 },
+        paper_bgcolor: 'rgba(0,0,0,0)',
+        plot_bgcolor: '#f8fbff',
+        xaxis: { title: 'Time (hours)' },
+        yaxis: { title: 'Efficiency (%)', range: [0, 105], gridcolor: '#e3edf8' },
+        legend: { orientation: 'h', y: 1.12 }
+    }, {
+        responsive: true,
+        displayModeBar: false
+    });
+}
+
+window.addEventListener('resize', function() {
+    ['statusTimelineChart', 'temperatureChart', 'purityChart', 'efficiencyChart'].forEach(function(chartId) {
+        const chartElement = document.getElementById(chartId);
+        if (chartElement) {
+            Plotly.Plots.resize(chartElement);
+        }
+    });
+});
+</script>
+{% endif %}
+{% endblock %}
