@@ -18,6 +18,9 @@ class SimulationService:
     """Service for gas purification simulations."""
 
     VALID_METHODS = ("Absorption", "Adsorption", "Membrane")
+    ADSORPTION_COLUMN_HEIGHT = 6.0
+    ADSORPTION_MTZ_FRACTION = 0.20
+    ADSORPTION_COLUMN_STEPS = 120
 
     def __init__(self):
         """Initialize the simulation service."""
@@ -120,6 +123,16 @@ class SimulationService:
             max_time,
             efficiency_evolution,
         )
+        adsorption_column = self._build_adsorption_column_visualization(
+            method,
+            context,
+            method_model,
+            max_time,
+        )
+        breakthrough_curve = adsorption_column.get(
+            "breakthrough_curve",
+            {"time_array": [], "cout_cin": []},
+        )
 
         return {
             "time_array": time_array,
@@ -134,6 +147,8 @@ class SimulationService:
             "method": method,
             "main_gas": context["main_gas_name"],
             "model_metrics": method_model["model_metrics"],
+            "adsorption_column": adsorption_column,
+            "breakthrough_curve": breakthrough_curve,
         }
 
     def _resolve_method(self, data):
@@ -625,6 +640,149 @@ class SimulationService:
             f"{final_purity:.1f}% (gain {purity_improvement:.1f} points). Average efficiency: "
             f"{average_efficiency:.1f}%. Model basis: {model_note}."
         )
+
+    def _build_adsorption_column_visualization(
+        self,
+        method,
+        context,
+        method_model,
+        max_time,
+    ):
+        """
+        Build a simple packed-bed adsorption profile and breakthrough curve.
+
+        The model stays intentionally lightweight:
+            - fixed bed height H
+            - design MTZ length as a constant fraction of H
+            - adsorption-front velocity tied to throughput, impurity loading,
+              and Langmuir capacity
+            - logistic breakthrough response based on the MTZ travel time
+        """
+        column_height = self.ADSORPTION_COLUMN_HEIGHT
+        mtz_length = column_height * self.ADSORPTION_MTZ_FRACTION
+
+        if method != "Adsorption":
+            return {
+                "available": False,
+                "note": (
+                    "Packed-bed adsorption visualization is available when "
+                    "the Adsorption method is selected."
+                ),
+                "height": round(column_height, 4),
+                "mtz_fraction": round(self.ADSORPTION_MTZ_FRACTION, 4),
+                "mtz_length": round(mtz_length, 4),
+                "front_velocity": 0.0,
+                "time_array": [],
+                "saturated_zone": [],
+                "mtz_zone": [],
+                "fresh_zone": [],
+                "breakthrough_start_time": 0.0,
+                "breakthrough_midpoint": 0.0,
+                "breakthrough_end_time": 0.0,
+                "breakthrough_curve": {
+                    "time_array": [],
+                    "cout_cin": [],
+                },
+            }
+
+        model_metrics = method_model["model_metrics"]
+        adsorption_capacity = max(model_metrics.get("capacity", 0.0), 0.05)
+        working_capacity_factor = clamp(
+            model_metrics.get("working_capacity_factor", 0.0),
+            0.0,
+            1.0,
+        )
+        impurity_fraction = clamp(context["impurity_fraction"], 0.01, 1.0)
+        flow_loading = max(context["flowrate"], 1.0) * impurity_fraction
+
+        # Higher flow and impurity loading move the front faster; higher
+        # Langmuir capacity slows it down by providing more adsorption headroom.
+        front_velocity = 0.03 * flow_loading / (0.25 + adsorption_capacity)
+        front_velocity /= 1.0 + 0.50 * working_capacity_factor
+        front_velocity = clamp(front_velocity, 0.12, 1.40)
+
+        breakthrough_start_time = max(
+            0.0,
+            (column_height - mtz_length) / max(front_velocity, 1e-9),
+        )
+        mtz_travel_time = mtz_length / max(front_velocity, 1e-9)
+        breakthrough_midpoint = breakthrough_start_time + 0.50 * mtz_travel_time
+        breakthrough_end_time = column_height / max(front_velocity, 1e-9)
+
+        column_end_time = max(
+            max_time,
+            breakthrough_midpoint + 2.50 * mtz_travel_time,
+        )
+        column_end_time = clamp(column_end_time, 1.0, 72.0)
+
+        time_steps = self.ADSORPTION_COLUMN_STEPS
+        dt = column_end_time / time_steps if time_steps > 0 else column_end_time
+        logistic_slope = clamp(8.0 / max(mtz_travel_time, 0.25), 0.5, 12.0)
+
+        time_array = []
+        saturated_zone = []
+        mtz_zone = []
+        fresh_zone = []
+        breakthrough_ratio = []
+
+        for index in range(time_steps + 1):
+            current_time = index * dt
+            z_saturated = clamp(front_velocity * current_time, 0.0, column_height)
+
+            # Keep the design MTZ length constant during most of the run, then
+            # clip the visible MTZ near the outlet so the displayed zones remain
+            # physically bounded inside the finite bed height.
+            z_mtz = clamp(
+                min(mtz_length, max(column_height - z_saturated, 0.0)),
+                0.0,
+                mtz_length,
+            )
+            z_fresh = clamp(
+                column_height - z_saturated - z_mtz,
+                0.0,
+                column_height,
+            )
+
+            breakthrough_value = self._logistic(
+                logistic_slope * (current_time - breakthrough_midpoint)
+            )
+
+            time_array.append(round(current_time, 4))
+            saturated_zone.append(round(z_saturated, 4))
+            mtz_zone.append(round(z_mtz, 4))
+            fresh_zone.append(round(z_fresh, 4))
+            breakthrough_ratio.append(round(breakthrough_value, 4))
+
+        return {
+            "available": True,
+            "note": (
+                "Packed-bed adsorption column showing the saturated zone, "
+                "mass transfer zone, and fresh adsorbent region."
+            ),
+            "height": round(column_height, 4),
+            "mtz_fraction": round(self.ADSORPTION_MTZ_FRACTION, 4),
+            "mtz_length": round(mtz_length, 4),
+            "front_velocity": round(front_velocity, 4),
+            "time_array": time_array,
+            "saturated_zone": saturated_zone,
+            "mtz_zone": mtz_zone,
+            "fresh_zone": fresh_zone,
+            "breakthrough_start_time": round(breakthrough_start_time, 4),
+            "breakthrough_midpoint": round(breakthrough_midpoint, 4),
+            "breakthrough_end_time": round(breakthrough_end_time, 4),
+            "breakthrough_curve": {
+                "time_array": time_array,
+                "cout_cin": breakthrough_ratio,
+            },
+        }
+
+    def _logistic(self, value):
+        """Numerically stable logistic helper for breakthrough curves."""
+        if value >= 0.0:
+            return 1.0 / (1.0 + math.exp(-value))
+
+        exponential = math.exp(value)
+        return exponential / (1.0 + exponential)
 
     def run_simulation(self, parameters):
         """Run a gas purification simulation."""

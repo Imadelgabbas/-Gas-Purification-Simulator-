@@ -77,38 +77,49 @@ def download_report():
 def simulation():
     """Simulation page route"""
     if request.method == 'POST':
+        simulation_form_state = collect_simulation_form_state(request.form)
+
         # Get form data from submission or use previously stored data
         if 'form_data' in session:
             # Use existing form data from input page
-            form_data = session['form_data']
+            form_data = dict(session['form_data'])
             # Update with simulation-specific parameters
-            form_data['temperature'] = float(request.form.get('temperature', 25))
-            form_data['pressure'] = float(request.form.get('pressure', 1))
-            form_data['flowRate'] = float(request.form.get('flowRate', 100))
-            form_data['desiredPurity'] = float(request.form.get('desiredPurity', 95))
-            form_data['impurityToRemove'] = request.form.get('impurityToRemove', 'Unknown')
+            form_data['temperature'] = simulation_form_state['temperature']
+            form_data['pressure'] = simulation_form_state['pressure']
+            form_data['flowRate'] = simulation_form_state['flowRate']
+            form_data['desiredPurity'] = simulation_form_state['desiredPurity']
+            form_data['impurityToRemove'] = simulation_form_state['impurityToRemove']
         else:
             # Create default form data for standalone simulation
             form_data = {
                 'gas_mixture': [
-                    {'name': request.form.get('impurityToRemove', 'Unknown'), 'percentage': 5},
+                    {'name': simulation_form_state['impurityToRemove'], 'percentage': 5},
                     {'name': 'Air', 'percentage': 95}
                 ],
-                'temperature': float(request.form.get('temperature', 25)),
-                'pressure': float(request.form.get('pressure', 1)),
-                'flowRate': float(request.form.get('flowRate', 100)),
-                'impurityToRemove': request.form.get('impurityToRemove', 'Unknown'),
-                'desiredPurity': float(request.form.get('desiredPurity', 95))
+                'temperature': simulation_form_state['temperature'],
+                'pressure': simulation_form_state['pressure'],
+                'flowRate': simulation_form_state['flowRate'],
+                'impurityToRemove': simulation_form_state['impurityToRemove'],
+                'desiredPurity': simulation_form_state['desiredPurity']
             }
-            session['form_data'] = form_data
+
+        simulation_payload = dict(form_data)
+        simulation_payload['method'] = simulation_form_state['method']
         
         # Run simulation
-        simulation_results = simulation_service.simulate_process(form_data)
+        simulation_results = simulation_service.simulate_process(simulation_payload)
         
-        # Store results in session
+        # Store updated form data, the submitted simulation form state, and results in session
+        session['form_data'] = form_data
+        session['simulation_form_state'] = simulation_form_state
         session['simulation_results'] = simulation_results
         
         return redirect(url_for('simulation'))
+
+    stored_form_data = session.get('form_data', {})
+    simulation_form_state = session.get('simulation_form_state')
+    if not simulation_form_state:
+        simulation_form_state = build_default_simulation_form_state(stored_form_data)
 
     case_study_results = session.get('case_study_results')
     case_study_dashboard = (
@@ -118,7 +129,10 @@ def simulation():
 
     return render_template(
         'simulation.html',
-        case_study_dashboard=case_study_dashboard
+        case_study_dashboard=case_study_dashboard,
+        preview_form_data=stored_form_data,
+        simulation_form_state=simulation_form_state,
+        simulation_results=session.get('simulation_results')
     )
 
 
@@ -152,9 +166,42 @@ def api_compare():
 @app.route('/api/simulate', methods=['POST'])
 def api_simulate():
     """API endpoint for simulation"""
-    data = request.get_json()
+    data = request.get_json() or {}
+    persist = bool(data.pop('persist', False))
+
     # Run simulation
     results = simulation_service.simulate_process(data)
+
+    if persist:
+        simulation_form_state = collect_simulation_form_state(data)
+        stored_form_data = dict(session.get('form_data', {}))
+
+        if stored_form_data:
+            stored_form_data['temperature'] = simulation_form_state['temperature']
+            stored_form_data['pressure'] = simulation_form_state['pressure']
+            stored_form_data['flowRate'] = simulation_form_state['flowRate']
+            stored_form_data['desiredPurity'] = simulation_form_state['desiredPurity']
+            stored_form_data['impurityToRemove'] = simulation_form_state['impurityToRemove']
+        else:
+            stored_form_data = {
+                'gas_mixture': data.get('gas_mixture') or [
+                    {'name': simulation_form_state['impurityToRemove'] or 'Unknown', 'percentage': 5},
+                    {'name': 'Air', 'percentage': 95},
+                ],
+                'temperature': simulation_form_state['temperature'],
+                'pressure': simulation_form_state['pressure'],
+                'flowRate': simulation_form_state['flowRate'],
+                'impurityToRemove': simulation_form_state['impurityToRemove'],
+                'desiredPurity': simulation_form_state['desiredPurity'],
+            }
+
+        if data.get('gas_mixture'):
+            stored_form_data['gas_mixture'] = data['gas_mixture']
+
+        session['form_data'] = stored_form_data
+        session['simulation_form_state'] = simulation_form_state
+        session['simulation_results'] = results
+
     return jsonify(results)
 
 
@@ -192,6 +239,48 @@ def collect_form_data(form):
     }
     
     return form_data
+
+
+def collect_simulation_form_state(form):
+    """
+    Collect simulation-page inputs so they can be restored after redirect.
+    """
+    return {
+        'method': str(form.get('method', '')).strip(),
+        'duration': safe_float(form.get('duration', 4.0), 4.0),
+        'temperature': safe_float(form.get('temperature', 25.0), 25.0),
+        'pressure': safe_float(form.get('pressure', 1.0), 1.0),
+        'flowRate': safe_float(form.get('flowRate', 100.0), 100.0),
+        'desiredPurity': safe_float(form.get('desiredPurity', 95.0), 95.0),
+        'impurityToRemove': str(form.get('impurityToRemove', '')).strip(),
+    }
+
+
+def build_default_simulation_form_state(form_data=None):
+    """
+    Build the initial simulation form state for first-page loads.
+    """
+    form_data = form_data or {}
+
+    return {
+        'method': '',
+        'duration': 4.0,
+        'temperature': safe_float(form_data.get('temperature', 25.0), 25.0),
+        'pressure': safe_float(form_data.get('pressure', 1.0), 1.0),
+        'flowRate': safe_float(form_data.get('flowRate', 100.0), 100.0),
+        'desiredPurity': safe_float(form_data.get('desiredPurity', 95.0), 95.0),
+        'impurityToRemove': str(form_data.get('impurityToRemove', '')).strip(),
+    }
+
+
+def safe_float(value, default):
+    """
+    Convert values to float safely while preserving a fallback default.
+    """
+    try:
+        return float(value)
+    except (TypeError, ValueError):
+        return default
 
 
 def build_case_study_dashboard(case_study_results):

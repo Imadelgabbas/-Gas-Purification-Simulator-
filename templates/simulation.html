@@ -103,9 +103,298 @@
         border: 1px solid rgba(13, 110, 253, 0.12);
     }
 
+    .simulation-method-panel {
+        display: none;
+    }
+
+    .simulation-method-panel.active {
+        display: block;
+    }
+
+    .simulation-packed-bed-shell {
+        display: flex;
+        gap: 1.5rem;
+        align-items: stretch;
+    }
+
+    .simulation-packed-bed-wrapper {
+        width: 170px;
+        flex-shrink: 0;
+    }
+
+    .simulation-packed-bed {
+        border: 2px solid #cbd5e1;
+        border-radius: 999px;
+        padding: 0.85rem;
+        background: linear-gradient(180deg, #f8fbff 0%, #eef5ff 100%);
+        box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.65);
+    }
+
+    .simulation-packed-bed-inner {
+        height: 360px;
+        display: flex;
+        flex-direction: column;
+        border-radius: 999px;
+        overflow: hidden;
+        background: #eef2f7;
+    }
+
+    .simulation-bed-zone {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        font-size: 0.86rem;
+        font-weight: 800;
+        line-height: 1.15;
+        padding: 0.45rem 0.35rem;
+        white-space: pre-line;
+        transition: height 0.25s ease, flex-basis 0.25s ease;
+        overflow: hidden;
+    }
+
+    .simulation-bed-zone-copy {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 0.12rem;
+        max-width: 100%;
+        padding: 0.35rem 0.45rem;
+        border-radius: 0.85rem;
+    }
+
+    .simulation-bed-zone-label {
+        font-size: 0.9rem;
+        font-weight: 800;
+        line-height: 1.05;
+        letter-spacing: 0.01em;
+    }
+
+    .simulation-bed-zone-value {
+        font-size: 0.72rem;
+        font-weight: 700;
+        line-height: 1.1;
+        opacity: 0.98;
+    }
+
+    .simulation-bed-zone-fresh {
+        background: linear-gradient(180deg, #57c785 0%, #2f9e5d 100%);
+        color: #ffffff;
+    }
+
+    .simulation-bed-zone-mtz {
+        background: linear-gradient(180deg, #ffe082 0%, #f4b400 100%);
+        color: #5b4300;
+    }
+
+    .simulation-bed-zone-saturated {
+        background: linear-gradient(180deg, #ff9b9b 0%, #dc3545 100%);
+        color: #ffffff;
+    }
+
+    .simulation-bed-zone-fresh .simulation-bed-zone-copy,
+    .simulation-bed-zone-saturated .simulation-bed-zone-copy {
+        background: rgba(15, 23, 42, 0.16);
+        box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.16);
+    }
+
+    .simulation-bed-zone-mtz .simulation-bed-zone-copy {
+        background: rgba(255, 255, 255, 0.45);
+        box-shadow: inset 0 0 0 1px rgba(91, 67, 0, 0.12);
+    }
+
+    .simulation-bed-zone-fresh .simulation-bed-zone-label,
+    .simulation-bed-zone-fresh .simulation-bed-zone-value,
+    .simulation-bed-zone-saturated .simulation-bed-zone-label,
+    .simulation-bed-zone-saturated .simulation-bed-zone-value {
+        text-shadow: 0 1px 2px rgba(15, 23, 42, 0.24);
+    }
+
+    .simulation-zone-metric {
+        border-radius: 1rem;
+        background: linear-gradient(180deg, #fbfdff 0%, #f3f8ff 100%);
+        border: 1px solid #dbe7f3;
+        padding: 1rem 1.05rem;
+        box-shadow: 0 12px 24px rgba(15, 23, 42, 0.05);
+    }
+
+    .simulation-zone-metric-highlight {
+        background: linear-gradient(135deg, #eef6ff 0%, #f8fbff 100%);
+        border-color: rgba(13, 110, 253, 0.22);
+        box-shadow: 0 16px 30px rgba(13, 110, 253, 0.1);
+    }
+
+    .simulation-zone-metric-label {
+        color: #64748b;
+        font-size: 0.72rem;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        font-weight: 700;
+        margin-bottom: 0.35rem;
+    }
+
+    .simulation-zone-metric-value {
+        color: #0f172a;
+        font-size: 1.3rem;
+        font-weight: 800;
+        line-height: 1.05;
+        letter-spacing: -0.02em;
+    }
+
+    .simulation-zone-metric-detail {
+        color: #64748b;
+        font-size: 0.8rem;
+        margin-top: 0.3rem;
+    }
+
+    .simulation-zone-metric-icon {
+        width: 2.6rem;
+        height: 2.6rem;
+        border-radius: 0.9rem;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        background: rgba(13, 110, 253, 0.1);
+        color: #0d6efd;
+        font-size: 1.05rem;
+        flex-shrink: 0;
+    }
+
+    .simulation-packed-bed-time-badge {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 5.25rem;
+        padding: 0.45rem 0.85rem;
+        border-radius: 999px;
+        background: linear-gradient(135deg, #eef6ff 0%, #f8fbff 100%);
+        border: 1px solid rgba(13, 110, 253, 0.2);
+        color: #0f172a;
+        font-size: 0.94rem;
+        font-weight: 800;
+        box-shadow: 0 10px 20px rgba(13, 110, 253, 0.08);
+    }
+
+    .simulation-slider-panel {
+        border-radius: 1rem;
+        background: linear-gradient(180deg, #fbfdff 0%, #f4f9ff 100%);
+        border: 1px solid #dbe7f3;
+        box-shadow: 0 12px 24px rgba(15, 23, 42, 0.05);
+        padding: 1rem 1rem 1.1rem;
+    }
+
+    .simulation-slider-label {
+        color: #64748b;
+        font-size: 0.72rem;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        font-weight: 700;
+    }
+
+    .simulation-slider-help {
+        color: #64748b;
+        font-size: 0.82rem;
+        margin-top: 0.3rem;
+    }
+
+    .simulation-slider-range {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 8.5rem;
+        padding: 0.5rem 0.8rem;
+        border-radius: 0.85rem;
+        background: #ffffff;
+        border: 1px solid #dbe7f3;
+        color: #0f172a;
+        font-size: 1rem;
+        font-weight: 800;
+        line-height: 1;
+        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.7);
+    }
+
+    .simulation-time-slider {
+        margin: 0.2rem 0 0;
+        padding: 0.25rem 0;
+    }
+
+    .simulation-time-slider::-webkit-slider-runnable-track {
+        height: 0.65rem;
+        border-radius: 999px;
+        background: linear-gradient(90deg, #cfe2ff 0%, #86b7fe 50%, #0d6efd 100%);
+        box-shadow: inset 0 0 0 1px rgba(13, 110, 253, 0.08);
+    }
+
+    .simulation-time-slider::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        appearance: none;
+        width: 1.3rem;
+        height: 1.3rem;
+        border-radius: 50%;
+        background: #0d6efd;
+        border: 3px solid #ffffff;
+        box-shadow: 0 0 0 1px rgba(13, 110, 253, 0.18), 0 10px 18px rgba(13, 110, 253, 0.22);
+        margin-top: -0.33rem;
+        cursor: pointer;
+    }
+
+    .simulation-time-slider::-moz-range-track {
+        height: 0.65rem;
+        border: none;
+        border-radius: 999px;
+        background: linear-gradient(90deg, #cfe2ff 0%, #86b7fe 50%, #0d6efd 100%);
+        box-shadow: inset 0 0 0 1px rgba(13, 110, 253, 0.08);
+    }
+
+    .simulation-time-slider::-moz-range-thumb {
+        width: 1.3rem;
+        height: 1.3rem;
+        border-radius: 50%;
+        background: #0d6efd;
+        border: 3px solid #ffffff;
+        box-shadow: 0 0 0 1px rgba(13, 110, 253, 0.18), 0 10px 18px rgba(13, 110, 253, 0.22);
+        cursor: pointer;
+    }
+
+    .simulation-legend-item {
+        display: flex;
+        align-items: center;
+        gap: 0.65rem;
+    }
+
+    .simulation-legend-swatch {
+        width: 0.9rem;
+        height: 0.9rem;
+        border-radius: 0.3rem;
+        flex-shrink: 0;
+    }
+
+    .simulation-legend-text {
+        color: #475569;
+        font-size: 0.9rem;
+    }
+
+    .simulation-split-stack {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        height: 100%;
+    }
+
     @media (max-width: 991.98px) {
         .simulation-arrow-stack {
             min-height: auto !important;
+        }
+
+        .simulation-packed-bed-shell {
+            flex-direction: column;
+        }
+
+        .simulation-packed-bed-wrapper {
+            width: 100%;
+            max-width: 220px;
+            margin: 0 auto;
         }
     }
 </style>
@@ -127,25 +416,25 @@
     <div class="row g-4">
         <div class="col-sm-6 col-xl-2">
             <div class="simulation-kpi-card">
-                <p class="kpi-label">Cycle Duration</p>
+                <p id="cycleDurationLabel" class="kpi-label">Cycle Duration</p>
                 <div id="cycleDurationKpi" class="kpi-value">-</div>
             </div>
         </div>
         <div class="col-sm-6 col-xl-2">
             <div class="simulation-kpi-card">
-                <p class="kpi-label">Adsorption Time</p>
+                <p id="adsorptionTimeLabel" class="kpi-label">Adsorption Time</p>
                 <div id="adsorptionTimeKpi" class="kpi-value">-</div>
             </div>
         </div>
         <div class="col-sm-6 col-xl-2">
             <div class="simulation-kpi-card">
-                <p class="kpi-label">Regeneration Time</p>
+                <p id="regenerationTimeLabel" class="kpi-label">Regeneration Time</p>
                 <div id="regenerationTimeKpi" class="kpi-value">-</div>
             </div>
         </div>
         <div class="col-sm-6 col-xl-2">
             <div class="simulation-kpi-card">
-                <p class="kpi-label">Cool-down Time</p>
+                <p id="cooldownTimeLabel" class="kpi-label">Cool-down Time</p>
                 <div id="cooldownTimeKpi" class="kpi-value">-</div>
             </div>
         </div>
@@ -186,41 +475,41 @@
                             <label for="simMethod" class="form-label">Purification Method</label>
                             <select class="form-select" id="simMethod" name="method" required>
                                 <option value="">Select a method</option>
-                                <option value="Absorption">Absorption</option>
-                                <option value="Adsorption">Adsorption</option>
-                                <option value="Membrane">Membrane</option>
+                                <option value="Absorption" {% if simulation_form_state.method == 'Absorption' %}selected{% endif %}>Absorption</option>
+                                <option value="Adsorption" {% if simulation_form_state.method == 'Adsorption' %}selected{% endif %}>Adsorption</option>
+                                <option value="Membrane" {% if simulation_form_state.method == 'Membrane' %}selected{% endif %}>Membrane</option>
                             </select>
                         </div>
                         <div class="col-md-6">
                             <label for="duration" class="form-label">Cycle Duration (hours)</label>
-                            <input type="number" class="form-control" id="duration" name="duration" min="0.5" max="24" step="0.5" value="4" required>
+                            <input type="number" class="form-control" id="duration" name="duration" min="0.5" max="24" step="0.5" value="{{ simulation_form_state.duration }}" required>
                         </div>
                         <div class="col-md-6">
                             <label for="simTemperature" class="form-label">Temperature (&deg;C)</label>
-                            <input type="number" class="form-control" id="simTemperature" name="temperature" min="-273" step="1" value="25" required>
+                            <input type="number" class="form-control" id="simTemperature" name="temperature" min="-273" step="1" value="{{ simulation_form_state.temperature }}" required>
                         </div>
                         <div class="col-md-6">
                             <label for="simPressure" class="form-label">Pressure (bar)</label>
-                            <input type="number" class="form-control" id="simPressure" name="pressure" min="0" step="0.1" value="1.0" required>
+                            <input type="number" class="form-control" id="simPressure" name="pressure" min="0" step="0.1" value="{{ simulation_form_state.pressure }}" required>
                         </div>
                         <div class="col-md-6">
                             <label for="simFlowRate" class="form-label">Flow Rate (m3/h)</label>
-                            <input type="number" class="form-control" id="simFlowRate" name="flowRate" min="0" step="1" value="100" required>
+                            <input type="number" class="form-control" id="simFlowRate" name="flowRate" min="0" step="1" value="{{ simulation_form_state.flowRate }}" required>
                         </div>
                         <div class="col-md-6">
                             <label for="simPurity" class="form-label">Target Purity (%)</label>
-                            <input type="number" class="form-control" id="simPurity" name="desiredPurity" min="0" max="100" step="0.1" value="95" required>
+                            <input type="number" class="form-control" id="simPurity" name="desiredPurity" min="0" max="100" step="0.1" value="{{ simulation_form_state.desiredPurity }}" required>
                         </div>
                         <div class="col-12">
                             <label for="simImpurity" class="form-label">Impurity to Remove</label>
-                            <input type="text" class="form-control" id="simImpurity" name="impurityToRemove" placeholder="e.g. CO2, H2S, NO2" required>
+                            <input type="text" class="form-control" id="simImpurity" name="impurityToRemove" placeholder="e.g. CO2, H2S, NO2" value="{{ simulation_form_state.impurityToRemove }}" required>
                         </div>
                     </div>
 
                     <div class="simulation-note-card p-3 mt-4">
                         <p class="fw-semibold mb-1">Preview mode</p>
-                        <p class="text-secondary mb-0 small">
-                            The dashboard below previews expected system behavior while the submitted simulation continues to use the existing backend logic.
+                        <p id="previewModeNote" class="text-secondary mb-0 small">
+                            The overview cards below use a fast preview. The packed-bed column and breakthrough plot are driven by the backend adsorption model.
                         </p>
                     </div>
 
@@ -245,103 +534,315 @@
                         </div>
                         <div>
                             <h2 class="app-card-title">Process Flow</h2>
-                            <p class="text-secondary mb-0">Feed Gas to dual TSA columns with purified outlet and regeneration heater loop.</p>
+                            <p id="processFlowSubtitle" class="text-secondary mb-0">Feed gas to dual TSA columns with purified outlet and regeneration heater loop.</p>
                         </div>
                     </div>
                 </div>
 
-                <div class="row g-3 align-items-stretch mb-3">
-                    <div class="col-lg-3">
-                        <div class="simulation-process-node h-100">
-                            <div class="card-body text-center d-flex flex-column justify-content-center h-100 p-4">
-                                <div class="text-primary fs-3 mb-3">
-                                    <i class="fa-solid fa-arrow-right-to-bracket"></i>
+                <div id="processFlowAdsorption" class="simulation-method-panel">
+                    <div class="row g-3 align-items-stretch mb-3">
+                        <div class="col-lg-3">
+                            <div class="simulation-process-node h-100">
+                                <div class="card-body text-center d-flex flex-column justify-content-center h-100 p-4">
+                                    <div class="text-primary fs-3 mb-3">
+                                        <i class="fa-solid fa-arrow-right-to-bracket"></i>
+                                    </div>
+                                    <p class="text-secondary text-uppercase small mb-1">Inlet</p>
+                                    <h3 class="h5 fw-bold mb-2">Feed Gas</h3>
+                                    <p class="text-secondary small mb-0">Incoming gas mixture enters the TSA train.</p>
                                 </div>
-                                <p class="text-secondary text-uppercase small mb-1">Inlet</p>
-                                <h3 class="h5 fw-bold mb-2">Feed Gas</h3>
-                                <p class="text-secondary small mb-0">Incoming gas mixture enters the TSA train.</p>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-1">
+                            <div class="d-flex h-100 align-items-center justify-content-center simulation-arrow-stack" style="min-height: 100%;">
+                                <span class="simulation-arrow-badge">
+                                    <i class="fa-solid fa-arrow-right"></i>
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-4">
+                            <div id="processColumnA" class="simulation-process-node h-100">
+                                <div class="card-body p-4">
+                                    <div class="d-flex justify-content-between align-items-start gap-2 mb-3">
+                                        <div>
+                                            <p class="text-secondary text-uppercase small mb-1">Column A</p>
+                                            <h3 class="h5 fw-bold mb-0">Adsorption Column</h3>
+                                        </div>
+                                        <span id="processColumnABadge" class="badge simulation-state-badge text-bg-secondary">-</span>
+                                    </div>
+                                    <p id="processColumnADescription" class="text-secondary small mb-3">-</p>
+                                    <div class="progress" style="height: 8px;">
+                                        <div id="processColumnAProgress" class="progress-bar bg-primary" role="progressbar" style="width: 0%;"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-4">
+                            <div id="processColumnB" class="simulation-process-node h-100">
+                                <div class="card-body p-4">
+                                    <div class="d-flex justify-content-between align-items-start gap-2 mb-3">
+                                        <div>
+                                            <p class="text-secondary text-uppercase small mb-1">Column B</p>
+                                            <h3 class="h5 fw-bold mb-0">Adsorption Column</h3>
+                                        </div>
+                                        <span id="processColumnBBadge" class="badge simulation-state-badge text-bg-secondary">-</span>
+                                    </div>
+                                    <p id="processColumnBDescription" class="text-secondary small mb-3">-</p>
+                                    <div class="progress" style="height: 8px;">
+                                        <div id="processColumnBProgress" class="progress-bar bg-primary" role="progressbar" style="width: 0%;"></div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
 
-                    <div class="col-lg-1">
-                        <div class="d-flex h-100 align-items-center justify-content-center simulation-arrow-stack" style="min-height: 100%;">
-                            <span class="simulation-arrow-badge">
-                                <i class="fa-solid fa-arrow-right"></i>
-                            </span>
-                        </div>
-                    </div>
-
-                    <div class="col-lg-4">
-                        <div id="processColumnA" class="simulation-process-node h-100">
-                            <div class="card-body p-4">
-                                <div class="d-flex justify-content-between align-items-start gap-2 mb-3">
-                                    <div>
-                                        <p class="text-secondary text-uppercase small mb-1">Column A</p>
-                                        <h3 class="h5 fw-bold mb-0">Adsorption Column</h3>
+                    <div class="row g-3 align-items-center">
+                        <div class="col-lg-8">
+                            <div class="simulation-heater-card p-4 h-100">
+                                <div class="row g-3 align-items-center">
+                                    <div class="col-md-4 text-center">
+                                        <span class="badge rounded-pill text-bg-warning px-3 py-2 mb-2">Regeneration Loop</span>
+                                        <h3 class="h6 fw-bold mb-1">Spent Bed Outlet</h3>
+                                        <p class="text-secondary small mb-0">Impurities leave during regeneration and cooling.</p>
                                     </div>
-                                    <span id="processColumnABadge" class="badge simulation-state-badge text-bg-secondary">-</span>
-                                </div>
-                                <p id="processColumnADescription" class="text-secondary small mb-3">-</p>
-                                <div class="progress" style="height: 8px;">
-                                    <div id="processColumnAProgress" class="progress-bar bg-primary" role="progressbar" style="width: 0%;"></div>
+                                    <div class="col-md-4 text-center">
+                                        <div class="text-warning fs-3 mb-2">
+                                            <i class="fa-solid fa-fire-flame-curved"></i>
+                                        </div>
+                                        <h3 class="h6 fw-bold mb-1">Heater</h3>
+                                        <p class="text-secondary small mb-0">Thermal swing restores adsorption capacity.</p>
+                                    </div>
+                                    <div class="col-md-4 text-center">
+                                        <span class="badge rounded-pill text-bg-info px-3 py-2 mb-2">Return Path</span>
+                                        <h3 class="h6 fw-bold mb-1">Reconditioned Bed</h3>
+                                        <p class="text-secondary small mb-0">Column cycles back into service for the next pass.</p>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-
-                    <div class="col-lg-4">
-                        <div id="processColumnB" class="simulation-process-node h-100">
-                            <div class="card-body p-4">
-                                <div class="d-flex justify-content-between align-items-start gap-2 mb-3">
-                                    <div>
-                                        <p class="text-secondary text-uppercase small mb-1">Column B</p>
-                                        <h3 class="h5 fw-bold mb-0">Adsorption Column</h3>
+                        <div class="col-lg-4">
+                            <div class="simulation-process-node h-100">
+                                <div class="card-body text-center d-flex flex-column justify-content-center h-100 p-4">
+                                    <div class="text-success fs-3 mb-3">
+                                        <i class="fa-solid fa-arrow-right-from-bracket"></i>
                                     </div>
-                                    <span id="processColumnBBadge" class="badge simulation-state-badge text-bg-secondary">-</span>
-                                </div>
-                                <p id="processColumnBDescription" class="text-secondary small mb-3">-</p>
-                                <div class="progress" style="height: 8px;">
-                                    <div id="processColumnBProgress" class="progress-bar bg-primary" role="progressbar" style="width: 0%;"></div>
+                                    <p class="text-secondary text-uppercase small mb-1">Outlet</p>
+                                    <h3 class="h5 fw-bold mb-2">Purified Gas</h3>
+                                    <p class="text-secondary small mb-0">Continuous product stream exits the active adsorption path.</p>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <div class="row g-3 align-items-center">
-                    <div class="col-lg-8">
-                        <div class="simulation-heater-card p-4 h-100">
-                            <div class="row g-3 align-items-center">
-                                <div class="col-md-4 text-center">
-                                    <span class="badge rounded-pill text-bg-warning px-3 py-2 mb-2">Regeneration Loop</span>
-                                    <h3 class="h6 fw-bold mb-1">Spent Bed Outlet</h3>
-                                    <p class="text-secondary small mb-0">Impurities leave during regeneration and cooling.</p>
-                                </div>
-                                <div class="col-md-4 text-center">
-                                    <div class="text-warning fs-3 mb-2">
-                                        <i class="fa-solid fa-fire-flame-curved"></i>
+                <div id="processFlowAbsorption" class="simulation-method-panel">
+                    <div class="row g-3 align-items-stretch mb-3">
+                        <div class="col-lg-3">
+                            <div class="simulation-process-node h-100">
+                                <div class="card-body text-center d-flex flex-column justify-content-center h-100 p-4">
+                                    <div class="text-primary fs-3 mb-3">
+                                        <i class="fa-solid fa-arrow-right-to-bracket"></i>
                                     </div>
-                                    <h3 class="h6 fw-bold mb-1">Heater</h3>
-                                    <p class="text-secondary small mb-0">Thermal swing restores adsorption capacity.</p>
+                                    <p class="text-secondary text-uppercase small mb-1">Gas Feed</p>
+                                    <h3 class="h5 fw-bold mb-2">Impure Gas</h3>
+                                    <p class="text-secondary small mb-0">The gas stream enters the absorber and rises through the packed contact section.</p>
                                 </div>
-                                <div class="col-md-4 text-center">
-                                    <span class="badge rounded-pill text-bg-info px-3 py-2 mb-2">Return Path</span>
-                                    <h3 class="h6 fw-bold mb-1">Reconditioned Bed</h3>
-                                    <p class="text-secondary small mb-0">Column cycles back into service for the next pass.</p>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-1">
+                            <div class="d-flex h-100 align-items-center justify-content-center simulation-arrow-stack" style="min-height: 100%;">
+                                <span class="simulation-arrow-badge">
+                                    <i class="fa-solid fa-arrow-right"></i>
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-4">
+                            <div class="simulation-process-node h-100">
+                                <div class="card-body p-4">
+                                    <div class="d-flex justify-content-between align-items-start gap-2 mb-3">
+                                        <div>
+                                            <p class="text-secondary text-uppercase small mb-1">Tower</p>
+                                            <h3 class="h5 fw-bold mb-0">Absorption Column</h3>
+                                        </div>
+                                        <span id="absorptionProcessBadge" class="badge simulation-state-badge text-bg-secondary">-</span>
+                                    </div>
+                                    <p id="absorptionProcessDescription" class="text-secondary small mb-3">-</p>
+                                    <div class="progress" style="height: 8px;">
+                                        <div id="absorptionProcessProgress" class="progress-bar bg-primary" role="progressbar" style="width: 0%;"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-4">
+                            <div class="simulation-process-node h-100">
+                                <div class="card-body text-center d-flex flex-column justify-content-center h-100 p-4">
+                                    <div class="text-success fs-3 mb-3">
+                                        <i class="fa-solid fa-arrow-right-from-bracket"></i>
+                                    </div>
+                                    <p class="text-secondary text-uppercase small mb-1">Gas Outlet</p>
+                                    <h3 class="h5 fw-bold mb-2">Purified Gas</h3>
+                                    <p class="text-secondary small mb-0">Cleaned gas leaves overhead after contacting the lean solvent.</p>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="col-lg-4">
-                        <div class="simulation-process-node h-100">
-                            <div class="card-body text-center d-flex flex-column justify-content-center h-100 p-4">
-                                <div class="text-success fs-3 mb-3">
-                                    <i class="fa-solid fa-arrow-right-from-bracket"></i>
+
+                    <div class="row g-3 align-items-center">
+                        <div class="col-lg-8">
+                            <div class="simulation-heater-card p-4 h-100">
+                                <div class="row g-3 align-items-center">
+                                    <div class="col-md-4 text-center">
+                                        <span class="badge rounded-pill text-bg-info px-3 py-2 mb-2">Lean Solvent</span>
+                                        <h3 class="h6 fw-bold mb-1">Top Entry</h3>
+                                        <p class="text-secondary small mb-0">Fresh solvent flows downward against the gas stream.</p>
+                                    </div>
+                                    <div class="col-md-4 text-center">
+                                        <div class="text-info fs-3 mb-2">
+                                            <i class="fa-solid fa-droplet"></i>
+                                        </div>
+                                        <h3 class="h6 fw-bold mb-1">Gas-Liquid Contact</h3>
+                                        <p class="text-secondary small mb-0">Impurity transfers from the gas phase into the solvent.</p>
+                                    </div>
+                                    <div class="col-md-4 text-center">
+                                        <span class="badge rounded-pill text-bg-warning px-3 py-2 mb-2">Rich Solvent</span>
+                                        <h3 class="h6 fw-bold mb-1">Bottom Exit</h3>
+                                        <p class="text-secondary small mb-0">Loaded solvent leaves for solvent recovery or regeneration.</p>
+                                    </div>
                                 </div>
-                                <p class="text-secondary text-uppercase small mb-1">Outlet</p>
-                                <h3 class="h5 fw-bold mb-2">Purified Gas</h3>
-                                <p class="text-secondary small mb-0">Continuous product stream exits the active adsorption path.</p>
+                            </div>
+                        </div>
+                        <div class="col-lg-4">
+                            <div class="simulation-process-node h-100">
+                                <div class="card-body p-4">
+                                    <div class="d-flex justify-content-between align-items-start gap-2 mb-3">
+                                        <div>
+                                            <p class="text-secondary text-uppercase small mb-1">Solvent Loop</p>
+                                            <h3 class="h5 fw-bold mb-0">Solvent Interaction</h3>
+                                        </div>
+                                        <span id="absorptionSolventBadge" class="badge simulation-state-badge text-bg-secondary">-</span>
+                                    </div>
+                                    <p id="absorptionSolventDescription" class="text-secondary small mb-3">-</p>
+                                    <div class="progress" style="height: 8px;">
+                                        <div id="absorptionSolventProgress" class="progress-bar bg-info" role="progressbar" style="width: 0%;"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="processFlowMembrane" class="simulation-method-panel">
+                    <div class="row g-3 align-items-stretch mb-3">
+                        <div class="col-lg-3">
+                            <div class="simulation-process-node h-100">
+                                <div class="card-body text-center d-flex flex-column justify-content-center h-100 p-4">
+                                    <div class="text-primary fs-3 mb-3">
+                                        <i class="fa-solid fa-arrow-right-to-bracket"></i>
+                                    </div>
+                                    <p class="text-secondary text-uppercase small mb-1">Feed</p>
+                                    <h3 class="h5 fw-bold mb-2">Pressurized Gas</h3>
+                                    <p class="text-secondary small mb-0">The feed stream enters the membrane module under a pressure difference.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-1">
+                            <div class="d-flex h-100 align-items-center justify-content-center simulation-arrow-stack" style="min-height: 100%;">
+                                <span class="simulation-arrow-badge">
+                                    <i class="fa-solid fa-arrow-right"></i>
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-4">
+                            <div class="simulation-process-node h-100">
+                                <div class="card-body p-4">
+                                    <div class="d-flex justify-content-between align-items-start gap-2 mb-3">
+                                        <div>
+                                            <p class="text-secondary text-uppercase small mb-1">Module</p>
+                                            <h3 class="h5 fw-bold mb-0">Membrane Separator</h3>
+                                        </div>
+                                        <span id="membraneProcessBadge" class="badge simulation-state-badge text-bg-secondary">-</span>
+                                    </div>
+                                    <p id="membraneProcessDescription" class="text-secondary small mb-3">-</p>
+                                    <div class="progress" style="height: 8px;">
+                                        <div id="membraneProcessProgress" class="progress-bar bg-primary" role="progressbar" style="width: 0%;"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-4">
+                            <div class="simulation-split-stack">
+                                <div class="simulation-process-node">
+                                    <div class="card-body text-center d-flex flex-column justify-content-center h-100 p-4">
+                                        <div class="text-info fs-4 mb-2">
+                                            <i class="fa-solid fa-down-long"></i>
+                                        </div>
+                                        <p class="text-secondary text-uppercase small mb-1">Permeate</p>
+                                        <h3 class="h6 fw-bold mb-2">Selective Stream</h3>
+                                        <p class="text-secondary small mb-0">The faster-permeating component passes through the membrane.</p>
+                                    </div>
+                                </div>
+                                <div class="simulation-process-node">
+                                    <div class="card-body text-center d-flex flex-column justify-content-center h-100 p-4">
+                                        <div class="text-success fs-4 mb-2">
+                                            <i class="fa-solid fa-arrow-right"></i>
+                                        </div>
+                                        <p class="text-secondary text-uppercase small mb-1">Retentate</p>
+                                        <h3 class="h6 fw-bold mb-2">Product Stream</h3>
+                                        <p class="text-secondary small mb-0">The slower-permeating stream exits as the retained product.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row g-3 align-items-center">
+                        <div class="col-lg-8">
+                            <div class="simulation-heater-card p-4 h-100">
+                                <div class="row g-3 align-items-center">
+                                    <div class="col-md-4 text-center">
+                                        <span class="badge rounded-pill text-bg-primary px-3 py-2 mb-2">Pressure Difference</span>
+                                        <h3 class="h6 fw-bold mb-1">Driving Force</h3>
+                                        <p class="text-secondary small mb-0">A transmembrane pressure gradient drives selective permeation.</p>
+                                    </div>
+                                    <div class="col-md-4 text-center">
+                                        <div class="text-primary fs-3 mb-2">
+                                            <i class="fa-solid fa-grip-lines-vertical"></i>
+                                        </div>
+                                        <h3 class="h6 fw-bold mb-1">Selective Barrier</h3>
+                                        <p class="text-secondary small mb-0">The membrane discriminates between impurity and product gas.</p>
+                                    </div>
+                                    <div class="col-md-4 text-center">
+                                        <span class="badge rounded-pill text-bg-success px-3 py-2 mb-2">Stream Split</span>
+                                        <h3 class="h6 fw-bold mb-1">Permeate / Retentate</h3>
+                                        <p class="text-secondary small mb-0">The outlet streams separate by permeability rather than adsorption.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-4">
+                            <div class="simulation-process-node h-100">
+                                <div class="card-body p-4">
+                                    <div class="d-flex justify-content-between align-items-start gap-2 mb-3">
+                                        <div>
+                                            <p class="text-secondary text-uppercase small mb-1">Stream Split</p>
+                                            <h3 class="h5 fw-bold mb-0">Permeate / Retentate</h3>
+                                        </div>
+                                        <span id="membraneSplitBadge" class="badge simulation-state-badge text-bg-secondary">-</span>
+                                    </div>
+                                    <p id="membraneSplitDescription" class="text-secondary small mb-3">-</p>
+                                    <div class="progress" style="height: 8px;">
+                                        <div id="membraneSplitProgress" class="progress-bar bg-success" role="progressbar" style="width: 0%;"></div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -361,7 +862,7 @@
                             <i class="fa-solid fa-columns"></i>
                         </div>
                         <div>
-                            <h2 class="app-card-title">Column A</h2>
+                            <h2 id="columnATitle" class="app-card-title">Column A</h2>
                             <p id="columnANote" class="text-secondary mb-0">-</p>
                         </div>
                     </div>
@@ -391,7 +892,7 @@
                             <i class="fa-solid fa-columns"></i>
                         </div>
                         <div>
-                            <h2 class="app-card-title">Column B</h2>
+                            <h2 id="columnBTitle" class="app-card-title">Column B</h2>
                             <p id="columnBNote" class="text-secondary mb-0">-</p>
                         </div>
                     </div>
@@ -416,7 +917,182 @@
     </div>
 </section>
 
-<section class="mb-4">
+<section id="packedBedSection" class="mb-4">
+    <div class="row g-4">
+        <div class="col-xl-5">
+            <div class="simulation-chart-card h-100 p-4">
+                <div class="app-card-header px-0 pt-0">
+                    <div class="d-flex align-items-center gap-3">
+                        <div class="icon-tile">
+                            <i class="fa-solid fa-layer-group"></i>
+                        </div>
+                        <div>
+                            <h2 class="app-card-title">Packed-Bed Column</h2>
+                            <p class="text-secondary mb-0">Saturated zone, MTZ, and fresh adsorbent profile along the bed height.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="packedBedEmptyState" class="simulation-note-card p-3">
+                    <p class="fw-semibold mb-1">Adsorption-only visualization</p>
+                    <p id="packedBedEmptyMessage" class="text-secondary mb-0 small">
+                        Select Adsorption to inspect the saturated zone, MTZ, and fresh zone through the packed bed.
+                    </p>
+                </div>
+
+                <div id="packedBedContent" class="d-none">
+                    <div class="simulation-packed-bed-shell">
+                        <div class="simulation-packed-bed-wrapper">
+                            <div class="d-flex justify-content-between align-items-center small text-secondary fw-semibold mb-2">
+                                <span>Outlet</span>
+                                <span id="packedBedTimeValue" class="simulation-packed-bed-time-badge">0.00 h</span>
+                            </div>
+                            <div class="simulation-packed-bed">
+                                <div class="simulation-packed-bed-inner">
+                                    <div id="freshZone" class="simulation-bed-zone simulation-bed-zone-fresh"></div>
+                                    <div id="mtzZone" class="simulation-bed-zone simulation-bed-zone-mtz"></div>
+                                    <div id="saturatedZone" class="simulation-bed-zone simulation-bed-zone-saturated"></div>
+                                </div>
+                            </div>
+                            <div class="d-flex justify-content-between align-items-center small text-secondary fw-semibold mt-2">
+                                <span>Inlet</span>
+                                <span>Bed Base</span>
+                            </div>
+                        </div>
+
+                        <div class="flex-grow-1">
+                            <div class="row g-3 mb-3">
+                                <div class="col-12">
+                                    <div class="simulation-zone-metric simulation-zone-metric-highlight h-100">
+                                        <div class="d-flex align-items-center justify-content-between gap-3 flex-wrap">
+                                            <div>
+                                                <p class="simulation-zone-metric-label">Column Height H</p>
+                                                <div id="packedBedHeightValue" class="simulation-zone-metric-value">H = 0.00 m</div>
+                                                <p class="simulation-zone-metric-detail mb-0">Total packed-bed height used for the adsorption front profile.</p>
+                                            </div>
+                                            <span class="simulation-zone-metric-icon">
+                                                <i class="fa-solid fa-ruler-vertical"></i>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="simulation-zone-metric h-100">
+                                        <div class="d-flex align-items-start justify-content-between gap-3">
+                                            <div>
+                                                <p class="simulation-zone-metric-label">Front Velocity</p>
+                                                <div id="packedBedVelocityMetric" class="simulation-zone-metric-value">-</div>
+                                                <p class="simulation-zone-metric-detail mb-0">Estimated movement of the mass-transfer front.</p>
+                                            </div>
+                                            <span class="simulation-zone-metric-icon">
+                                                <i class="fa-solid fa-gauge-high"></i>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="simulation-zone-metric h-100">
+                                        <div class="d-flex align-items-start justify-content-between gap-3">
+                                            <div>
+                                                <p class="simulation-zone-metric-label">Design MTZ Length</p>
+                                                <div id="packedBedMtzMetric" class="simulation-zone-metric-value">-</div>
+                                                <p class="simulation-zone-metric-detail mb-0">Target width of the active mass-transfer zone.</p>
+                                            </div>
+                                            <span class="simulation-zone-metric-icon">
+                                                <i class="fa-solid fa-arrows-left-right-to-line"></i>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="simulation-zone-metric h-100">
+                                        <div class="d-flex align-items-start justify-content-between gap-3">
+                                            <div>
+                                                <p class="simulation-zone-metric-label">Breakthrough t50</p>
+                                                <div id="packedBedBreakthroughMetric" class="simulation-zone-metric-value">-</div>
+                                                <p class="simulation-zone-metric-detail mb-0">Midpoint time where the outlet ratio reaches 50%.</p>
+                                            </div>
+                                            <span class="simulation-zone-metric-icon">
+                                                <i class="fa-solid fa-clock"></i>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="simulation-zone-metric h-100">
+                                        <div class="d-flex align-items-start justify-content-between gap-3">
+                                            <div>
+                                                <p class="simulation-zone-metric-label">Current Cout/Cin</p>
+                                                <div id="packedBedOutletMetric" class="simulation-zone-metric-value">-</div>
+                                                <p class="simulation-zone-metric-detail mb-0">Instantaneous outlet-to-inlet concentration ratio.</p>
+                                            </div>
+                                            <span class="simulation-zone-metric-icon">
+                                                <i class="fa-solid fa-chart-line"></i>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="simulation-note-card p-3 mb-3">
+                                <p class="text-secondary text-uppercase small mb-1">Zone Snapshot</p>
+                                <p id="packedBedSnapshot" class="mb-0 small">-</p>
+                            </div>
+
+                            <div class="simulation-slider-panel mb-3">
+                                <div class="d-flex justify-content-between align-items-start gap-3 flex-wrap mb-3">
+                                    <div>
+                                        <label for="packedBedTimeSlider" class="simulation-slider-label mb-0">Packed-Bed Time Step</label>
+                                        <p class="simulation-slider-help mb-0">Drag the slider to inspect the adsorption front position at any point in the cycle.</p>
+                                    </div>
+                                    <div class="text-sm-end">
+                                        <p class="simulation-slider-label mb-1">Selected / Final Time</p>
+                                        <span id="packedBedTimeRange" class="simulation-slider-range">0.00 / 0.00 h</span>
+                                    </div>
+                                </div>
+                                <input type="range" class="form-range simulation-time-slider" id="packedBedTimeSlider" min="0" max="0" step="1" value="0">
+                            </div>
+
+                            <div class="d-flex flex-column gap-2">
+                                <div class="simulation-legend-item">
+                                    <span class="simulation-legend-swatch" style="background: linear-gradient(180deg, #dc3545 0%, #ff9b9b 100%);"></span>
+                                    <span class="simulation-legend-text">Saturated zone: adsorbent near equilibrium loading.</span>
+                                </div>
+                                <div class="simulation-legend-item">
+                                    <span class="simulation-legend-swatch" style="background: linear-gradient(180deg, #f4b400 0%, #ffe082 100%);"></span>
+                                    <span class="simulation-legend-text">MTZ: active concentration front moving through the bed.</span>
+                                </div>
+                                <div class="simulation-legend-item">
+                                    <span class="simulation-legend-swatch" style="background: linear-gradient(180deg, #2f9e5d 0%, #57c785 100%);"></span>
+                                    <span class="simulation-legend-text">Fresh zone: unused adsorption capacity still available.</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-7">
+            <div class="simulation-chart-card h-100">
+                <div class="app-card-header p-4 pb-0">
+                    <div class="d-flex align-items-center gap-3">
+                        <div class="icon-tile">
+                            <i class="fa-solid fa-chart-area"></i>
+                        </div>
+                        <div>
+                            <h2 class="app-card-title">Breakthrough Curve</h2>
+                            <p class="text-secondary mb-0">Outlet concentration response shown as a simple logistic Cout/Cin curve.</p>
+                        </div>
+                    </div>
+                </div>
+                <div id="breakthroughChart" class="chart-frame"></div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section id="performanceChartsSection" class="mb-4">
     <div class="row g-4">
         <div class="col-lg-6">
             <div class="simulation-chart-card h-100">
@@ -453,7 +1129,7 @@
     </div>
 </section>
 
-<section class="mb-4">
+<section id="adsorptionCaseStudySection" class="mb-4">
     <div class="simulation-chart-card">
         <div class="app-card-header p-4 pb-0">
             <div class="d-flex align-items-center gap-3">
@@ -544,48 +1220,296 @@
 {% block extra_js %}
 <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 <script>
+const initialSimulationFormState = {{ simulation_form_state | tojson }};
+const previewSessionFormData = {{ preview_form_data | tojson }};
+const initialSimulationResults = {{ simulation_results | tojson }};
+const simulationApiUrl = '{{ url_for("api_simulate") }}';
+let packedBedPreviewResult = null;
+let packedBedRequestCounter = 0;
+let packedBedFetchTimer = null;
+let lastSimulationResults = initialSimulationResults;
+
 document.addEventListener('DOMContentLoaded', function() {
     const simulationForm = document.getElementById('simulationForm');
     const previewFields = ['simMethod', 'duration', 'simTemperature', 'simPressure', 'simFlowRate', 'simPurity', 'simImpurity'];
+    const packedBedSlider = document.getElementById('packedBedTimeSlider');
+
+    applyInitialSimulationFormState(initialSimulationFormState);
 
     previewFields.forEach(function(fieldId) {
         const field = document.getElementById(fieldId);
         if (field) {
-            field.addEventListener('input', renderSimulationDashboard);
-            field.addEventListener('change', renderSimulationDashboard);
+            field.addEventListener('input', handlePreviewFieldChange);
+            field.addEventListener('change', handlePreviewFieldChange);
         }
     });
 
-    simulationForm.addEventListener('submit', function(event) {
-        const method = document.getElementById('simMethod').value;
-        const impurity = document.getElementById('simImpurity').value;
+    simulationForm.addEventListener('submit', handleSimulationSubmit);
 
-        if (!method) {
-            event.preventDefault();
-            alert('Please select a purification method.');
+    if (packedBedSlider) {
+        packedBedSlider.addEventListener('input', function() {
+            updatePackedBedFrame(Number(packedBedSlider.value));
+        });
+    }
+
+    renderPackedBedEmptyState('Select Adsorption to inspect the saturated zone, MTZ, and fresh zone through the packed bed.');
+    renderSimulationDashboard({
+        committedResults: initialSimulationResults,
+        skipPackedBedFetch: Boolean(
+            initialSimulationResults
+            && initialSimulationResults.method === 'Adsorption'
+            && initialSimulationResults.adsorption_column
+        )
+    });
+});
+
+function handlePreviewFieldChange() {
+    lastSimulationResults = null;
+    renderSimulationDashboard();
+}
+
+function validateSimulationForm() {
+    const method = document.getElementById('simMethod').value;
+    const impurity = document.getElementById('simImpurity').value;
+
+    if (!method) {
+        alert('Please select a purification method.');
+        return false;
+    }
+
+    if (!impurity) {
+        alert('Please specify the impurity to remove.');
+        return false;
+    }
+
+    return true;
+}
+
+async function handleSimulationSubmit(event) {
+    event.preventDefault();
+
+    if (!validateSimulationForm()) {
+        return;
+    }
+
+    const form = event.currentTarget;
+    const submitButton = form.querySelector('button[type="submit"]');
+    const originalButtonHtml = submitButton ? submitButton.innerHTML : '';
+    const scrollPosition = window.scrollY;
+
+    if (submitButton) {
+        submitButton.disabled = true;
+        submitButton.innerHTML = '<i class="fa-solid fa-spinner fa-spin me-2"></i>Running...';
+    }
+
+    try {
+        const response = await fetch(simulationApiUrl, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(buildSimulationPayload({ persist: true }))
+        });
+
+        if (!response.ok) {
+            throw new Error('Simulation request failed with status ' + response.status);
+        }
+
+        const results = await response.json();
+        lastSimulationResults = results;
+        renderSimulationDashboard({
+            committedResults: results,
+            skipPackedBedFetch: true
+        });
+        window.scrollTo({ top: scrollPosition, left: 0, behavior: 'auto' });
+    } catch (error) {
+        console.error('Simulation run error:', error);
+        alert('Unable to run the simulation right now. Please try again.');
+    } finally {
+        if (submitButton) {
+            submitButton.disabled = false;
+            submitButton.innerHTML = originalButtonHtml;
+        }
+    }
+}
+
+function applyInitialSimulationFormState(state) {
+    if (!state || typeof state !== 'object') {
+        return;
+    }
+
+    const fieldMap = {
+        simMethod: 'method',
+        duration: 'duration',
+        simTemperature: 'temperature',
+        simPressure: 'pressure',
+        simFlowRate: 'flowRate',
+        simPurity: 'desiredPurity',
+        simImpurity: 'impurityToRemove'
+    };
+
+    Object.keys(fieldMap).forEach(function(fieldId) {
+        const field = document.getElementById(fieldId);
+        const stateKey = fieldMap[fieldId];
+        const value = state[stateKey];
+
+        if (!field || value === null || value === undefined) {
             return;
         }
 
-        if (!impurity) {
-            event.preventDefault();
-            alert('Please specify the impurity to remove.');
-        }
+        field.value = value;
     });
+}
 
-    renderSimulationDashboard();
-});
+function getMethodVisualMeta(method) {
+    const methodMeta = {
+        Adsorption: {
+            flowSubtitle: 'Feed gas passes through twin TSA beds with a regeneration loop and purified outlet.',
+            previewModeNote: 'The overview cards below use a fast preview. The packed-bed column and breakthrough plot are driven by the backend adsorption model.',
+            kpiLabels: {
+                duration: 'Cycle Duration',
+                stageA: 'Adsorption Time',
+                stageB: 'Regeneration Time',
+                stageC: 'Cool-down Time'
+            },
+            panelTitles: {
+                unitA: 'Column A',
+                unitB: 'Column B'
+            },
+            temperatureTraceNames: {
+                unitA: 'Column A',
+                unitB: 'Column B'
+            }
+        },
+        Absorption: {
+            flowSubtitle: 'Impure gas contacts lean solvent in an absorption tower and leaves as a purified overhead stream.',
+            previewModeNote: 'The overview cards below use a fast preview. The visible process representation stays in gas-liquid absorption mode for this method.',
+            kpiLabels: {
+                duration: 'Simulation Window',
+                stageA: 'Contact Time',
+                stageB: 'Solvent Residence',
+                stageC: 'Refresh Window'
+            },
+            panelTitles: {
+                unitA: 'Absorber',
+                unitB: 'Solvent Loop'
+            },
+            temperatureTraceNames: {
+                unitA: 'Absorber',
+                unitB: 'Solvent Loop'
+            }
+        },
+        Membrane: {
+            flowSubtitle: 'A membrane module splits the feed into permeate and retentate streams using selective permeation.',
+            previewModeNote: 'The overview cards below use a fast preview. The visible process representation stays in membrane-separation mode for this method.',
+            kpiLabels: {
+                duration: 'Simulation Window',
+                stageA: 'Separation Time',
+                stageB: 'Permeate Draw',
+                stageC: 'Retentate Hold-up'
+            },
+            panelTitles: {
+                unitA: 'Membrane Module',
+                unitB: 'Stream Split'
+            },
+            temperatureTraceNames: {
+                unitA: 'Membrane Module',
+                unitB: 'Permeate / Retentate'
+            }
+        }
+    };
 
-function renderSimulationDashboard() {
+    return methodMeta[method] || methodMeta.Absorption;
+}
+
+function getMethodPhaseDurations(method, duration) {
+    if (method === 'Adsorption') {
+        return {
+            stageA: duration * 0.5,
+            stageB: duration * 0.3,
+            stageC: Math.max(0.1, duration * 0.2)
+        };
+    }
+
+    if (method === 'Membrane') {
+        return {
+            stageA: duration * 0.6,
+            stageB: duration * 0.25,
+            stageC: Math.max(0.1, duration * 0.15)
+        };
+    }
+
+    return {
+        stageA: duration * 0.65,
+        stageB: duration * 0.25,
+        stageC: Math.max(0.1, duration * 0.10)
+    };
+}
+
+function updateKpiLabels(labels) {
+    document.getElementById('cycleDurationLabel').textContent = labels.duration;
+    document.getElementById('adsorptionTimeLabel').textContent = labels.stageA;
+    document.getElementById('regenerationTimeLabel').textContent = labels.stageB;
+    document.getElementById('cooldownTimeLabel').textContent = labels.stageC;
+}
+
+function toggleMethodPanel(panelId, isActive) {
+    const panel = document.getElementById(panelId);
+    if (panel) {
+        panel.classList.toggle('active', Boolean(isActive));
+    }
+}
+
+function toggleSection(sectionId, isVisible) {
+    const section = document.getElementById(sectionId);
+    if (section) {
+        section.classList.toggle('d-none', !isVisible);
+    }
+}
+
+function updateMethodLayout(method, preview) {
+    const visualMeta = preview.visualMeta || getMethodVisualMeta(method);
+
+    document.getElementById('processFlowSubtitle').textContent = visualMeta.flowSubtitle;
+    document.getElementById('previewModeNote').textContent = visualMeta.previewModeNote;
+    document.getElementById('columnATitle').textContent = visualMeta.panelTitles.unitA;
+    document.getElementById('columnBTitle').textContent = visualMeta.panelTitles.unitB;
+
+    toggleMethodPanel('processFlowAdsorption', method === 'Adsorption');
+    toggleMethodPanel('processFlowAbsorption', method === 'Absorption');
+    toggleMethodPanel('processFlowMembrane', method === 'Membrane');
+    toggleSection('packedBedSection', method === 'Adsorption');
+    toggleSection('adsorptionCaseStudySection', method === 'Adsorption');
+
+    if (method === 'Adsorption') {
+        updateProcessFlow(preview.columnA, preview.columnB);
+        return;
+    }
+
+    if (method === 'Absorption') {
+        updateAbsorptionFlow(preview.columnA, preview.columnB);
+        return;
+    }
+
+    updateMembraneFlow(preview.columnA, preview.columnB);
+}
+
+function renderSimulationDashboard(options) {
+    const safeOptions = options || {};
+    const committedResults = safeOptions.committedResults || null;
+    const skipPackedBedFetch = Boolean(safeOptions.skipPackedBedFetch);
     const method = document.getElementById('simMethod').value || 'Absorption';
     const duration = Number(document.getElementById('duration').value) || 4;
     const baseTemperature = Number(document.getElementById('simTemperature').value) || 25;
     const pressure = Number(document.getElementById('simPressure').value) || 1;
     const flowRate = Number(document.getElementById('simFlowRate').value) || 100;
     const targetPurity = Number(document.getElementById('simPurity').value) || 95;
+    const methodPhaseDurations = getMethodPhaseDurations(method, duration);
+    const methodVisualMeta = getMethodVisualMeta(method);
 
-    const adsorptionTime = duration * 0.5;
-    const regenerationTime = duration * 0.3;
-    const cooldownTime = Math.max(0.1, duration - adsorptionTime - regenerationTime);
+    const adsorptionTime = methodPhaseDurations.stageA;
+    const regenerationTime = methodPhaseDurations.stageB;
+    const cooldownTime = methodPhaseDurations.stageC;
 
     const preview = buildPreviewSeries({
         method: method,
@@ -599,20 +1523,37 @@ function renderSimulationDashboard() {
         cooldownTime: cooldownTime
     });
 
+    updateKpiLabels(methodVisualMeta.kpiLabels);
     updateKpis({
         duration: duration,
         adsorptionTime: adsorptionTime,
         regenerationTime: regenerationTime,
         cooldownTime: cooldownTime,
-        finalPurity: preview.finalPurity,
-        finalEfficiency: preview.finalEfficiency
+        finalPurity: getCommittedFinalPurity(committedResults, preview.finalPurity),
+        finalEfficiency: getCommittedFinalEfficiency(committedResults, preview.finalEfficiency)
     });
 
-    updateColumnPanels(preview.columnA, preview.columnB);
-    updateProcessFlow(preview.columnA, preview.columnB);
-    renderPurityChart(preview);
-    renderEfficiencyChart(preview);
+    updateMethodLayout(method, preview);
+    updateColumnPanels(preview.columnA, preview.columnB, preview.visualMeta);
+    renderPurityChart(committedResults || preview);
+    renderEfficiencyChart(committedResults || preview);
     renderTemperatureChart(preview);
+
+    if (method === 'Adsorption') {
+        if (committedResults && committedResults.adsorption_column && committedResults.adsorption_column.available) {
+            packedBedPreviewResult = committedResults;
+            renderPackedBedPreview(committedResults);
+            return;
+        }
+
+        if (!skipPackedBedFetch) {
+            schedulePackedBedPreview();
+        }
+        return;
+    }
+
+    packedBedPreviewResult = null;
+    renderPackedBedEmptyState('Select Adsorption to inspect the saturated zone, MTZ, and fresh zone through the packed bed.');
 }
 
 function buildPreviewSeries(config) {
@@ -636,15 +1577,28 @@ function buildPreviewSeries(config) {
 
     let finalColumnA = null;
     let finalColumnB = null;
+    const visualMeta = getMethodVisualMeta(config.method);
 
     for (let index = 0; index <= steps; index += 1) {
         const time = config.duration * (index / steps);
+        const normalizedProgress = index / steps;
         const progress = 1 - Math.exp(-((1.8 + config.flowRate / 180 + config.pressure / 4) * methodFactor) * (index / steps));
         const purity = Math.min(99.9, initialPurity + (config.targetPurity - initialPurity) * progress);
         const efficiency = Math.max(35, 98 - temperaturePenalty - (index / steps) * (28 + config.flowRate / 20) / methodFactor);
 
-        const columnA = getColumnStatus(time, config);
-        const columnB = getColumnStatus((time + config.adsorptionTime) % config.duration, config);
+        let columnA;
+        let columnB;
+
+        if (config.method === 'Adsorption') {
+            columnA = getColumnStatus(time, config);
+            columnB = getColumnStatus((time + config.adsorptionTime) % config.duration, config);
+        } else if (config.method === 'Membrane') {
+            columnA = getMembraneModuleStatus(normalizedProgress, config);
+            columnB = getMembraneSplitStatus(normalizedProgress, config);
+        } else {
+            columnA = getAbsorptionColumnStatus(normalizedProgress, config);
+            columnB = getAbsorptionSolventStatus(normalizedProgress, config);
+        }
 
         timeArray.push(time);
         purityArray.push(purity);
@@ -666,6 +1620,8 @@ function buildPreviewSeries(config) {
         temperatureArrayB: temperatureArrayB,
         stateArrayA: stateArrayA,
         stateArrayB: stateArrayB,
+        targetPurity: config.targetPurity,
+        visualMeta: visualMeta,
         finalPurity: purityArray[purityArray.length - 1] || 0,
         finalEfficiency: efficiencyArray[efficiencyArray.length - 1] || 0,
         columnA: finalColumnA,
@@ -720,6 +1676,50 @@ function getColumnStatus(timeInCycle, config) {
     };
 }
 
+function getAbsorptionColumnStatus(normalizedProgress, config) {
+    const progress = 100 * (1 - Math.exp(-(1.6 + config.pressure / 3 + config.flowRate / 260) * normalizedProgress));
+
+    return {
+        state: 'Absorption',
+        tone: 'primary',
+        note: 'Gas rises through the absorber while lean solvent captures the selected impurity.',
+        progress: Math.max(0, Math.min(100, progress)),
+        temperature: config.baseTemperature + 3 * Math.sin(normalizedProgress * Math.PI)
+    };
+}
+
+function getAbsorptionSolventStatus(normalizedProgress, config) {
+    return {
+        state: 'Solvent Circulation',
+        tone: 'info',
+        note: 'Lean solvent enters from the top and rich solvent leaves the bottom for recovery.',
+        progress: Math.max(0, Math.min(100, 40 + normalizedProgress * 55)),
+        temperature: config.baseTemperature + 6 * normalizedProgress
+    };
+}
+
+function getMembraneModuleStatus(normalizedProgress, config) {
+    const separationProgress = 100 * (1 - Math.exp(-(1.4 + config.pressure / 2.5) * normalizedProgress));
+
+    return {
+        state: 'Separation',
+        tone: 'primary',
+        note: 'The membrane module selectively permeates the faster-transporting component.',
+        progress: Math.max(0, Math.min(100, separationProgress)),
+        temperature: config.baseTemperature + 1.5 * normalizedProgress
+    };
+}
+
+function getMembraneSplitStatus(normalizedProgress, config) {
+    return {
+        state: 'Stream Split',
+        tone: 'success',
+        note: 'Permeate and retentate leave on separate sides of the membrane without adsorption or solvent contact.',
+        progress: Math.max(0, Math.min(100, 35 + normalizedProgress * 60)),
+        temperature: config.baseTemperature - 1.0 * normalizedProgress
+    };
+}
+
 function updateKpis(values) {
     document.getElementById('cycleDurationKpi').textContent = formatNumber(values.duration) + ' h';
     document.getElementById('adsorptionTimeKpi').textContent = formatNumber(values.adsorptionTime) + ' h';
@@ -729,8 +1729,12 @@ function updateKpis(values) {
     document.getElementById('finalEfficiencyKpi').textContent = formatNumber(values.finalEfficiency) + '%';
 }
 
-function updateColumnPanels(columnA, columnB) {
+function updateColumnPanels(columnA, columnB, visualMeta) {
     const activeColumn = chooseActiveColumn(columnA, columnB);
+    if (visualMeta && visualMeta.panelTitles) {
+        document.getElementById('columnATitle').textContent = visualMeta.panelTitles.unitA;
+        document.getElementById('columnBTitle').textContent = visualMeta.panelTitles.unitB;
+    }
     updateSingleColumnPanel('A', columnA, activeColumn === 'A');
     updateSingleColumnPanel('B', columnB, activeColumn === 'B');
 }
@@ -757,6 +1761,48 @@ function updateProcessFlow(columnA, columnB) {
     updateSingleProcessColumn('B', columnB, activeColumn === 'B');
 }
 
+function updateAbsorptionFlow(columnA, columnB) {
+    const absorberBadge = document.getElementById('absorptionProcessBadge');
+    const absorberDescription = document.getElementById('absorptionProcessDescription');
+    const absorberProgress = document.getElementById('absorptionProcessProgress');
+    const solventBadge = document.getElementById('absorptionSolventBadge');
+    const solventDescription = document.getElementById('absorptionSolventDescription');
+    const solventProgress = document.getElementById('absorptionSolventProgress');
+
+    absorberBadge.textContent = columnA.state;
+    absorberBadge.className = 'badge simulation-state-badge text-bg-' + columnA.tone;
+    absorberDescription.textContent = columnA.note;
+    absorberProgress.style.width = Math.max(0, Math.min(100, columnA.progress)) + '%';
+    absorberProgress.className = 'progress-bar bg-' + columnA.tone;
+
+    solventBadge.textContent = columnB.state;
+    solventBadge.className = 'badge simulation-state-badge text-bg-' + columnB.tone;
+    solventDescription.textContent = columnB.note;
+    solventProgress.style.width = Math.max(0, Math.min(100, columnB.progress)) + '%';
+    solventProgress.className = 'progress-bar bg-' + columnB.tone;
+}
+
+function updateMembraneFlow(columnA, columnB) {
+    const moduleBadge = document.getElementById('membraneProcessBadge');
+    const moduleDescription = document.getElementById('membraneProcessDescription');
+    const moduleProgress = document.getElementById('membraneProcessProgress');
+    const splitBadge = document.getElementById('membraneSplitBadge');
+    const splitDescription = document.getElementById('membraneSplitDescription');
+    const splitProgress = document.getElementById('membraneSplitProgress');
+
+    moduleBadge.textContent = columnA.state;
+    moduleBadge.className = 'badge simulation-state-badge text-bg-' + columnA.tone;
+    moduleDescription.textContent = columnA.note;
+    moduleProgress.style.width = Math.max(0, Math.min(100, columnA.progress)) + '%';
+    moduleProgress.className = 'progress-bar bg-' + columnA.tone;
+
+    splitBadge.textContent = columnB.state;
+    splitBadge.className = 'badge simulation-state-badge text-bg-' + columnB.tone;
+    splitDescription.textContent = columnB.note;
+    splitProgress.style.width = Math.max(0, Math.min(100, columnB.progress)) + '%';
+    splitProgress.className = 'progress-bar bg-' + columnB.tone;
+}
+
 function updateSingleProcessColumn(label, column, isActive) {
     const node = document.getElementById('processColumn' + label);
     const badge = document.getElementById('processColumn' + label + 'Badge');
@@ -781,10 +1827,374 @@ function chooseActiveColumn(columnA, columnB) {
     return columnA.progress >= columnB.progress ? 'A' : 'B';
 }
 
+function schedulePackedBedPreview() {
+    if (packedBedFetchTimer) {
+        window.clearTimeout(packedBedFetchTimer);
+    }
+
+    packedBedFetchTimer = window.setTimeout(fetchPackedBedPreview, 180);
+}
+
+async function fetchPackedBedPreview() {
+    const method = document.getElementById('simMethod').value || '';
+    if (method !== 'Adsorption') {
+        packedBedPreviewResult = null;
+        renderPackedBedEmptyState('Select Adsorption to inspect the saturated zone, MTZ, and fresh zone through the packed bed.');
+        return;
+    }
+
+    const requestCounter = ++packedBedRequestCounter;
+
+    try {
+        const response = await fetch(simulationApiUrl, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(buildSimulationPayload())
+        });
+
+        if (!response.ok) {
+            throw new Error('Preview request failed with status ' + response.status);
+        }
+
+        const results = await response.json();
+        if (requestCounter !== packedBedRequestCounter) {
+            return;
+        }
+
+        packedBedPreviewResult = results;
+        renderPackedBedPreview(results);
+    } catch (error) {
+        if (requestCounter !== packedBedRequestCounter) {
+            return;
+        }
+
+        console.error('Packed-bed preview error:', error);
+        packedBedPreviewResult = null;
+        renderPackedBedEmptyState('Packed-bed preview is temporarily unavailable.');
+    }
+}
+
+function buildSimulationPayload(options) {
+    const payloadOptions = options || {};
+    const impurityName = document.getElementById('simImpurity').value.trim() || 'CO2';
+    const baseData = previewSessionFormData && typeof previewSessionFormData === 'object'
+        ? JSON.parse(JSON.stringify(previewSessionFormData))
+        : {};
+    const baseGasMixture = Array.isArray(baseData.gas_mixture) ? baseData.gas_mixture : [];
+
+    return {
+        ...baseData,
+        gas_mixture: ensurePreviewGasMixture(baseGasMixture, impurityName),
+        method: document.getElementById('simMethod').value || 'Adsorption',
+        duration: Number(document.getElementById('duration').value) || 4,
+        temperature: Number(document.getElementById('simTemperature').value) || 25,
+        pressure: Number(document.getElementById('simPressure').value) || 1,
+        flowRate: Number(document.getElementById('simFlowRate').value) || 100,
+        desiredPurity: Number(document.getElementById('simPurity').value) || 95,
+        impurityToRemove: impurityName,
+        persist: Boolean(payloadOptions.persist)
+    };
+}
+
+function ensurePreviewGasMixture(gasMixture, impurityName) {
+    const cleanImpurity = String(impurityName || 'CO2').trim();
+    const normalizedGasMixture = (gasMixture || []).map(function(component) {
+        return {
+            name: String(component.name || '').trim(),
+            percentage: Number(component.percentage) || 0
+        };
+    }).filter(function(component) {
+        return component.name && component.percentage > 0;
+    });
+
+    const hasImpurity = normalizedGasMixture.some(function(component) {
+        return component.name.toUpperCase() === cleanImpurity.toUpperCase();
+    });
+
+    if (normalizedGasMixture.length > 0 && hasImpurity) {
+        return normalizedGasMixture;
+    }
+
+    const dominantComponent = normalizedGasMixture.reduce(function(best, current) {
+        return current.percentage > best.percentage ? current : best;
+    }, { name: 'N2', percentage: 95 });
+    const fallbackCarrier = dominantComponent.name && dominantComponent.name.toUpperCase() !== cleanImpurity.toUpperCase()
+        ? dominantComponent.name
+        : 'N2';
+
+    return [
+        { name: cleanImpurity || 'CO2', percentage: 5 },
+        { name: fallbackCarrier, percentage: 95 }
+    ];
+}
+
+function renderPackedBedPreview(results) {
+    const adsorptionColumn = results.adsorption_column || {};
+    const timeArray = adsorptionColumn.time_array || [];
+
+    if (!adsorptionColumn.available || timeArray.length === 0) {
+        renderPackedBedEmptyState(adsorptionColumn.note || 'Packed-bed preview is unavailable for the current method.');
+        return;
+    }
+
+    document.getElementById('packedBedEmptyState').classList.add('d-none');
+    document.getElementById('packedBedContent').classList.remove('d-none');
+    document.getElementById('packedBedVelocityMetric').textContent = formatNumber(adsorptionColumn.front_velocity) + ' m/h';
+    document.getElementById('packedBedMtzMetric').textContent = formatNumber(adsorptionColumn.mtz_length) + ' m';
+    document.getElementById('packedBedBreakthroughMetric').textContent = formatNumber(adsorptionColumn.breakthrough_midpoint) + ' h';
+    document.getElementById('packedBedHeightValue').textContent = 'H = ' + formatNumber(adsorptionColumn.height) + ' m';
+
+    const slider = document.getElementById('packedBedTimeSlider');
+    const defaultIndex = findClosestTimeIndex(timeArray, adsorptionColumn.breakthrough_midpoint);
+    slider.max = Math.max(timeArray.length - 1, 0);
+    slider.value = defaultIndex;
+
+    updatePackedBedFrame(defaultIndex);
+}
+
+function updatePackedBedFrame(index) {
+    const results = packedBedPreviewResult;
+    if (!results || !results.adsorption_column || !results.adsorption_column.available) {
+        return;
+    }
+
+    const adsorptionColumn = results.adsorption_column;
+    const breakthroughCurve = results.breakthrough_curve || adsorptionColumn.breakthrough_curve || {};
+    const timeArray = adsorptionColumn.time_array || [];
+    const safeIndex = Math.max(0, Math.min(Number(index) || 0, Math.max(timeArray.length - 1, 0)));
+    const currentTime = Number(timeArray[safeIndex]) || 0;
+    const saturatedLength = Number((adsorptionColumn.saturated_zone || [])[safeIndex]) || 0;
+    const mtzLength = Number((adsorptionColumn.mtz_zone || [])[safeIndex]) || 0;
+    const freshLength = Number((adsorptionColumn.fresh_zone || [])[safeIndex]) || 0;
+    const outletRatio = Number((breakthroughCurve.cout_cin || [])[safeIndex]) || 0;
+    const totalHeight = Math.max(Number(adsorptionColumn.height) || 0, 1e-9);
+    const finalTime = Number(timeArray[timeArray.length - 1]) || 0;
+
+    applyPackedBedZone('freshZone', freshLength, totalHeight, 'Fresh');
+    applyPackedBedZone('mtzZone', mtzLength, totalHeight, 'MTZ');
+    applyPackedBedZone('saturatedZone', saturatedLength, totalHeight, 'Saturated');
+
+    document.getElementById('packedBedTimeValue').textContent = formatNumber(currentTime) + ' h';
+    document.getElementById('packedBedTimeRange').textContent = formatNumber(currentTime) + ' / ' + formatNumber(finalTime) + ' h';
+    document.getElementById('packedBedOutletMetric').textContent = formatNumber(outletRatio);
+    document.getElementById('packedBedSnapshot').textContent =
+        'Saturated zone ' + formatNumber(saturatedLength) + ' m, MTZ ' + formatNumber(mtzLength) + ' m, fresh zone '
+        + formatNumber(freshLength) + ' m at ' + formatNumber(currentTime) + ' h. Outlet ratio Cout/Cin = '
+        + formatNumber(outletRatio) + '.';
+
+    renderBreakthroughChart(results, safeIndex);
+}
+
+function applyPackedBedZone(zoneId, zoneLength, totalHeight, label) {
+    const zoneElement = document.getElementById(zoneId);
+    const zonePercent = totalHeight > 0 ? Math.max(0, Math.min(100, (zoneLength / totalHeight) * 100)) : 0;
+    const zoneMarkup = zonePercent >= 18
+        ? '<span class="simulation-bed-zone-copy"><span class="simulation-bed-zone-label">' + label + '</span><span class="simulation-bed-zone-value">' + formatNumber(zoneLength) + ' m</span></span>'
+        : zonePercent >= 9
+            ? '<span class="simulation-bed-zone-copy"><span class="simulation-bed-zone-label">' + label + '</span></span>'
+            : '';
+
+    zoneElement.style.height = zonePercent + '%';
+    zoneElement.style.flexBasis = zonePercent + '%';
+    zoneElement.style.display = zonePercent > 0 ? 'flex' : 'none';
+    zoneElement.innerHTML = zoneMarkup;
+    zoneElement.setAttribute('aria-label', label + ' zone: ' + formatNumber(zoneLength) + ' m');
+    zoneElement.title = label + ': ' + formatNumber(zoneLength) + ' m';
+}
+
+function findClosestTimeIndex(timeArray, targetValue) {
+    if (!Array.isArray(timeArray) || timeArray.length === 0) {
+        return 0;
+    }
+
+    let closestIndex = 0;
+    let smallestGap = Number.POSITIVE_INFINITY;
+
+    timeArray.forEach(function(value, index) {
+        const gap = Math.abs(Number(value) - Number(targetValue));
+        if (gap < smallestGap) {
+            smallestGap = gap;
+            closestIndex = index;
+        }
+    });
+
+    return closestIndex;
+}
+
+function renderPackedBedEmptyState(message) {
+    document.getElementById('packedBedContent').classList.add('d-none');
+    document.getElementById('packedBedEmptyState').classList.remove('d-none');
+    document.getElementById('packedBedEmptyMessage').textContent = message;
+    renderEmptyBreakthroughChart(message);
+}
+
+function renderBreakthroughChart(results, selectedIndex) {
+    const adsorptionColumn = results.adsorption_column || {};
+    const breakthroughCurve = results.breakthrough_curve || adsorptionColumn.breakthrough_curve || {};
+    const timeArray = breakthroughCurve.time_array || [];
+    const ratioArray = breakthroughCurve.cout_cin || [];
+    const lowerReferenceLimit = 0.05;
+    const upperReferenceLimit = 0.95;
+
+    if (timeArray.length === 0 || ratioArray.length === 0) {
+        renderEmptyBreakthroughChart('No breakthrough data available.');
+        return;
+    }
+
+    const safeIndex = Math.max(0, Math.min(Number(selectedIndex) || 0, Math.max(timeArray.length - 1, 0)));
+    const startTime = Number(timeArray[0]) || 0;
+    const endTime = Number(timeArray[timeArray.length - 1]) || 0;
+    const breakthroughMidpoint = Number(adsorptionColumn.breakthrough_midpoint) || 0;
+
+    Plotly.react('breakthroughChart', [
+        {
+            x: timeArray,
+            y: ratioArray,
+            type: 'scatter',
+            mode: 'lines',
+            name: 'Cout/Cin Response',
+            line: { color: '#dc3545', width: 3 },
+            fill: 'tozeroy',
+            fillcolor: 'rgba(220, 53, 69, 0.12)',
+            hovertemplate: '<b>Time:</b> %{x:.2f} h<br><b>Cout/Cin:</b> %{y:.3f}<extra></extra>'
+        },
+        {
+            x: [timeArray[safeIndex]],
+            y: [ratioArray[safeIndex]],
+            type: 'scatter',
+            mode: 'markers',
+            name: 'Selected Operating Point',
+            marker: {
+                color: '#0f172a',
+                size: 10,
+                line: { color: '#ffffff', width: 2 }
+            },
+            hovertemplate: '<b>Selected:</b> %{x:.2f} h<br><b>Cout/Cin:</b> %{y:.3f}<extra></extra>'
+        },
+        {
+            x: [breakthroughMidpoint, breakthroughMidpoint],
+            y: [0, 1],
+            type: 'scatter',
+            mode: 'lines',
+            name: 't50 Midpoint',
+            line: { color: '#f59e0b', width: 2, dash: 'dash' },
+            hovertemplate: '<b>t50:</b> %{x:.2f} h<extra></extra>'
+        },
+        {
+            x: [startTime, endTime],
+            y: [lowerReferenceLimit, lowerReferenceLimit],
+            type: 'scatter',
+            mode: 'lines',
+            name: 'Lower Reference Limit (0.05)',
+            line: { color: '#64748b', width: 2, dash: 'dash' },
+            hovertemplate: '<b>Reference limit:</b> %{y:.2f}<extra></extra>'
+        },
+        {
+            x: [startTime, endTime],
+            y: [upperReferenceLimit, upperReferenceLimit],
+            type: 'scatter',
+            mode: 'lines',
+            name: 'Upper Reference Limit (0.95)',
+            line: { color: '#94a3b8', width: 2, dash: 'dash' },
+            hovertemplate: '<b>Reference limit:</b> %{y:.2f}<extra></extra>'
+        }
+    ], {
+        margin: { t: 68, r: 18, b: 50, l: 58 },
+        paper_bgcolor: 'rgba(0,0,0,0)',
+        plot_bgcolor: '#f8fbff',
+        title: {
+            text: 'Breakthrough Response<br><span style="font-size:12px;color:#64748b;">Outlet concentration ratio with t50 and engineering reference limits</span>',
+            x: 0.02,
+            xanchor: 'left',
+            font: { size: 16, color: '#0f172a' }
+        },
+        hovermode: 'x unified',
+        xaxis: {
+            title: 'Time (hours)',
+            gridcolor: '#e3edf8',
+            linecolor: '#cbd5e1',
+            zeroline: false,
+            showline: true
+        },
+        yaxis: {
+            title: 'Cout / Cin',
+            range: [0, 1.05],
+            gridcolor: '#e3edf8',
+            linecolor: '#cbd5e1',
+            zeroline: false,
+            showline: true
+        },
+        annotations: [
+            {
+                x: endTime,
+                y: lowerReferenceLimit,
+                xref: 'x',
+                yref: 'y',
+                text: 'Ref. limit 0.05',
+                showarrow: false,
+                xanchor: 'right',
+                yanchor: 'bottom',
+                font: { size: 11, color: '#475569' },
+                bgcolor: 'rgba(248,251,255,0.92)'
+            },
+            {
+                x: endTime,
+                y: upperReferenceLimit,
+                xref: 'x',
+                yref: 'y',
+                text: 'Ref. limit 0.95',
+                showarrow: false,
+                xanchor: 'right',
+                yanchor: 'bottom',
+                font: { size: 11, color: '#64748b' },
+                bgcolor: 'rgba(248,251,255,0.92)'
+            }
+        ],
+        legend: {
+            orientation: 'h',
+            y: 1.18,
+            x: 0,
+            bgcolor: 'rgba(248,251,255,0.85)',
+            bordercolor: 'rgba(227,237,248,0.9)',
+            borderwidth: 1
+        }
+    }, {
+        responsive: true,
+        displayModeBar: false
+    });
+}
+
+function renderEmptyBreakthroughChart(message) {
+    Plotly.react('breakthroughChart', [], {
+        margin: { t: 20, r: 10, b: 45, l: 55 },
+        paper_bgcolor: 'rgba(0,0,0,0)',
+        plot_bgcolor: '#f8fbff',
+        xaxis: { visible: false },
+        yaxis: { visible: false },
+        annotations: [{
+            text: message,
+            x: 0.5,
+            y: 0.5,
+            xref: 'paper',
+            yref: 'paper',
+            showarrow: false,
+            font: { size: 14, color: '#64748b' }
+        }]
+    }, {
+        responsive: true,
+        displayModeBar: false
+    });
+}
+
 function renderPurityChart(preview) {
-    Plotly.newPlot('previewPurityChart', [{
-        x: preview.timeArray,
-        y: preview.purityArray,
+    const timeArray = preview.time_array || preview.timeArray || [];
+    const purityArray = preview.purity_evolution || preview.purityArray || [];
+    const targetPurity = Number(preview.target_purity || preview.targetPurity || 0);
+    const traces = [{
+        x: timeArray,
+        y: purityArray,
         type: 'scatter',
         mode: 'lines',
         name: 'Purity',
@@ -792,12 +2202,27 @@ function renderPurityChart(preview) {
         fill: 'tozeroy',
         fillcolor: 'rgba(13, 110, 253, 0.12)',
         hovertemplate: '<b>Time:</b> %{x:.2f} h<br><b>Purity:</b> %{y:.2f}%<extra></extra>'
-    }], {
+    }];
+
+    if (targetPurity > 0 && timeArray.length > 0) {
+        traces.push({
+            x: [timeArray[0], timeArray[timeArray.length - 1]],
+            y: [targetPurity, targetPurity],
+            type: 'scatter',
+            mode: 'lines',
+            name: 'Target Purity',
+            line: { color: '#6c757d', width: 2, dash: 'dash' },
+            hovertemplate: '<b>Target:</b> %{y:.2f}%<extra></extra>'
+        });
+    }
+
+    Plotly.newPlot('previewPurityChart', traces, {
         margin: { t: 20, r: 10, b: 45, l: 55 },
         paper_bgcolor: 'rgba(0,0,0,0)',
         plot_bgcolor: '#f8fbff',
         xaxis: { title: 'Time (hours)' },
-        yaxis: { title: 'Purity (%)', range: [0, 105], gridcolor: '#e3edf8' }
+        yaxis: { title: 'Purity (%)', range: [0, 105], gridcolor: '#e3edf8' },
+        legend: { orientation: 'h', y: 1.12 }
     }, {
         responsive: true,
         displayModeBar: false
@@ -805,9 +2230,12 @@ function renderPurityChart(preview) {
 }
 
 function renderEfficiencyChart(preview) {
+    const timeArray = preview.time_array || preview.timeArray || [];
+    const efficiencyArray = preview.efficiency_evolution || preview.efficiencyArray || [];
+
     Plotly.newPlot('previewEfficiencyChart', [{
-        x: preview.timeArray,
-        y: preview.efficiencyArray,
+        x: timeArray,
+        y: efficiencyArray,
         type: 'scatter',
         mode: 'lines',
         name: 'Efficiency',
@@ -827,25 +2255,49 @@ function renderEfficiencyChart(preview) {
     });
 }
 
+function getCommittedFinalPurity(results, fallbackValue) {
+    if (results && results.final_purity !== undefined && results.final_purity !== null) {
+        return Number(results.final_purity);
+    }
+
+    return fallbackValue;
+}
+
+function getCommittedFinalEfficiency(results, fallbackValue) {
+    const efficiencyArray = results && Array.isArray(results.efficiency_evolution)
+        ? results.efficiency_evolution
+        : [];
+
+    if (efficiencyArray.length > 0) {
+        return Number(efficiencyArray[efficiencyArray.length - 1]);
+    }
+
+    return fallbackValue;
+}
+
 function renderTemperatureChart(preview) {
+    const traceNames = preview.visualMeta && preview.visualMeta.temperatureTraceNames
+        ? preview.visualMeta.temperatureTraceNames
+        : { unitA: 'Column A', unitB: 'Column B' };
+
     Plotly.newPlot('previewTemperatureChart', [
         {
             x: preview.timeArray,
             y: preview.temperatureArrayA,
             type: 'scatter',
             mode: 'lines',
-            name: 'Column A',
+            name: traceNames.unitA,
             line: { color: '#0d6efd', width: 3 },
-            hovertemplate: '<b>Column A</b><br>Time: %{x:.2f} h<br>Temperature: %{y:.2f} C<extra></extra>'
+            hovertemplate: '<b>' + traceNames.unitA + '</b><br>Time: %{x:.2f} h<br>Temperature: %{y:.2f} C<extra></extra>'
         },
         {
             x: preview.timeArray,
             y: preview.temperatureArrayB,
             type: 'scatter',
             mode: 'lines',
-            name: 'Column B',
+            name: traceNames.unitB,
             line: { color: '#6ea8fe', width: 3 },
-            hovertemplate: '<b>Column B</b><br>Time: %{x:.2f} h<br>Temperature: %{y:.2f} C<extra></extra>'
+            hovertemplate: '<b>' + traceNames.unitB + '</b><br>Time: %{x:.2f} h<br>Temperature: %{y:.2f} C<extra></extra>'
         }
     ], {
         margin: { t: 20, r: 10, b: 45, l: 55 },
@@ -866,7 +2318,7 @@ function formatNumber(value) {
 }
 
 window.addEventListener('resize', function() {
-    ['previewPurityChart', 'previewEfficiencyChart', 'previewTemperatureChart'].forEach(function(chartId) {
+    ['previewPurityChart', 'previewEfficiencyChart', 'previewTemperatureChart', 'breakthroughChart'].forEach(function(chartId) {
         const chartElement = document.getElementById(chartId);
         if (chartElement) {
             Plotly.Plots.resize(chartElement);
